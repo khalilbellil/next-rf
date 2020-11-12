@@ -1,27 +1,37 @@
+import { Col, Row } from "reactstrap";
+import Link from 'next/link'
+import MainForm from "../components/MainForm";
+
 export default function Home() {
   return (
-    
-        <div className="container pt-5 pb-5">
+        <div className="container pt-3 pb-5">
           <main>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sagittis sed orci in elementum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse ut felis non magna venenatis vulputate sed ut est. Sed fermentum libero id massa fermentum pretium sed vel velit. Nulla facilisi. Donec in porttitor leo. Fusce lacus nisi, egestas sit amet lectus eu, pellentesque lacinia enim. Maecenas quis bibendum lorem. Quisque feugiat nisi sit amet nibh lobortis tempor in vel sem. Praesent quam tellus, scelerisque sed dolor vitae, consequat pretium justo.
-
-Maecenas nec augue sed lorem ornare eleifend facilisis non sem. Nullam sagittis, sem in bibendum blandit, ipsum libero iaculis odio, nec venenatis ante mi ut lacus. Nam volutpat urna vitae aliquam euismod. Nunc tincidunt orci sit amet nunc auctor, sit amet malesuada nisl maximus. Nam vel consectetur purus. Quisque sed faucibus nisl. Nulla mollis, erat sit amet cursus venenatis, dolor metus gravida ante, gravida laoreet lectus justo sed lorem. Etiam non feugiat eros. Quisque et est molestie, sodales dui sed, luctus nisl. Donec vel elit orci. Nulla facilisi. Suspendisse pulvinar felis metus, porta molestie ante dictum nec. Vestibulum aliquet iaculis sapien.
-
-Duis felis turpis, vehicula porta eros posuere, ultricies dictum justo. Maecenas vel quam id magna tempor tincidunt. Donec sodales dolor a neque sagittis, eget commodo sapien feugiat. Vivamus varius venenatis pellentesque. Pellentesque rutrum vestibulum quam sit amet porta. Fusce accumsan mauris eget mollis ornare. Praesent sit amet nibh eu dui sagittis volutpat a eu augue. Duis tortor erat, malesuada non finibus nec, scelerisque a lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Mauris sed neque vitae felis dictum aliquet.
-
-Mauris commodo vel elit sit amet laoreet. Nunc lobortis ante sit amet massa egestas auctor ut sed urna. Nunc ipsum risus, placerat quis convallis nec, accumsan ut tellus. Quisque pretium at quam tempor ultricies. Fusce nec justo vel tellus gravida convallis. Suspendisse gravida magna felis, nec consequat mi aliquam eu. Mauris sed felis mauris. In eu tellus libero. Curabitur lobortis eros vitae metus interdum laoreet.
-
-Phasellus non convallis justo. In vitae imperdiet nisi, id venenatis turpis. Cras elementum elit ante, eget dapibus nulla consectetur quis. Vestibulum sapien arcu, vulputate cursus maximus non, cursus sed leo. Aenean malesuada turpis neque, ac accumsan tortor dapibus quis. Quisque sed fermentum mi, quis ornare orci. Vestibulum laoreet velit libero, euismod consequat est mollis ac. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris pellentesque lorem vel dictum suscipit. Nulla metus nibh, elementum at elementum id, consectetur sed ex. Donec vulputate arcu feugiat finibus cursus. Etiam vestibulum neque vitae consectetur dignissim. Vivamus consectetur est ac lacus molestie lobortis. In sit amet volutpat dolor, nec elementum nulla.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sagittis sed orci in elementum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse ut felis non magna venenatis vulputate sed ut est. Sed fermentum libero id massa fermentum pretium sed vel velit. Nulla facilisi. Donec in porttitor leo. Fusce lacus nisi, egestas sit amet lectus eu, pellentesque lacinia enim. Maecenas quis bibendum lorem. Quisque feugiat nisi sit amet nibh lobortis tempor in vel sem. Praesent quam tellus, scelerisque sed dolor vitae, consequat pretium justo.
-
-Maecenas nec augue sed lorem ornare eleifend facilisis non sem. Nullam sagittis, sem in bibendum blandit, ipsum libero iaculis odio, nec venenatis ante mi ut lacus. Nam volutpat urna vitae aliquam euismod. Nunc tincidunt orci sit amet nunc auctor, sit amet malesuada nisl maximus. Nam vel consectetur purus. Quisque sed faucibus nisl. Nulla mollis, erat sit amet cursus venenatis, dolor metus gravida ante, gravida laoreet lectus justo sed lorem. Etiam non feugiat eros. Quisque et est molestie, sodales dui sed, luctus nisl. Donec vel elit orci. Nulla facilisi. Suspendisse pulvinar felis metus, porta molestie ante dictum nec. Vestibulum aliquet iaculis sapien.
-
-Duis felis turpis, vehicula porta eros posuere, ultricies dictum justo. Maecenas vel quam id magna tempor tincidunt. Donec sodales dolor a neque sagittis, eget commodo sapien feugiat. Vivamus varius venenatis pellentesque. Pellentesque rutrum vestibulum quam sit amet porta. Fusce accumsan mauris eget mollis ornare. Praesent sit amet nibh eu dui sagittis volutpat a eu augue. Duis tortor erat, malesuada non finibus nec, scelerisque a lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Mauris sed neque vitae felis dictum aliquet.
-
-Mauris commodo vel elit sit amet laoreet. Nunc lobortis ante sit amet massa egestas auctor ut sed urna. Nunc ipsum risus, placerat quis convallis nec, accumsan ut tellus. Quisque pretium at quam tempor ultricies. Fusce nec justo vel tellus gravida convallis. Suspendisse gravida magna felis, nec consequat mi aliquam eu. Mauris sed felis mauris. In eu tellus libero. Curabitur lobortis eros vitae metus interdum laoreet.
-
-Phasellus non convallis justo. In vitae imperdiet nisi, id venenatis turpis. Cras elementum elit ante, eget dapibus nulla consectetur quis. Vestibulum sapien arcu, vulputate cursus maximus non, cursus sed leo. Aenean malesuada turpis neque, ac accumsan tortor dapibus quis. Quisque sed fermentum mi, quis ornare orci. Vestibulum laoreet velit libero, euismod consequat est mollis ac. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris pellentesque lorem vel dictum suscipit. Nulla metus nibh, elementum at elementum id, consectetur sed ex. Donec vulputate arcu feugiat finibus cursus. Etiam vestibulum neque vitae consectetur dignissim. Vivamus consectetur est ac lacus molestie lobortis. In sit amet volutpat dolor, nec elementum nulla.
+            <h1 className="text-center pb-2" style={{color: "#ED5B0F"}}>Trouver un entrepreneur gratuitement en 2 étapes</h1>
+            <Row className="home_content text-center">
+              <div className="col-md-6 home_card">
+                <h2>1</h2>
+                <img className="shadow-top center" src="/home_card_img_step_one.png" width="300"/>
+                <p>Remplir le formulaire <Link href="/demande-de-soumission"><a>"Trouver un entrepreneur" </a></Link>
+                avec les informations concernant votre projet de rénovation.</p>
+              </div>
+              <div className="col-md-6 home_card">
+                <h2>2</h2>
+                <img className="shadow-top center" src="/home_card_img_step_two.png" width="300"/>
+                <p>Dans 48h à 72h, un à trois entrepreneurs vous contacteront pour vous proposer une soumission pour les travaux.</p>
+              </div>
+            </Row>
+            <br/>
+            <Row>
+              <div className="col-md-6 home_card">
+                <h3 className="text-center">Trouver un entrepreneur</h3>
+                <MainForm/>
+              </div>
+              <div className="col-md-6 home_card">
+                a
+              </div>
+            </Row>
           </main>
+          <br/>
         </div>
   )
 }

@@ -1,34 +1,145 @@
+h1,h3,h4{
+    color: #ED5B0F;
+}
+.content {
+    min-height: calc(100vh - 70px);
+}
+.footer {
+    height: 50px;
+}
 .shadow-top {
     box-shadow: 0 -5px 5px -5px #333;
 }
-
 .shadow-right {
     box-shadow: 5px 0 5px -5px #333;
 }
-
 .shadow {
     box-shadow: 0 5px 5px -5px #333;
 }
-
 .shadow-left {
     box-shadow: -5px 0 5px -5px #333;
 }
-
 .shadow-all {
     box-shadow: 0 0 5px #333;
 }
-
 .navbar a{
     color: white;
 }
-
-.rf-btn{
-    background: rgb(221,121,71);
-    background: linear-gradient(90deg, rgba(221,121,71,1) 0%, rgba(235,91,14,1) 35%, rgba(251,89,19,1) 75%, rgba(254,131,49,1) 100%);
-    border: 2px solid black
+.navbar a:hover{
+    color: #E8AF6C;
 }
-.rf-btn:hover{
+.home_content .center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.home_card img{
+    border: 1px solid black;
+    border-radius: 50%;
+}
+.home_card p{
+    padding-top: 5px;
+    font-size: large;
+    font-weight: bold;
+}
+.home_card a{
+    color: #ED5A0F;
+}
+.home_card a:hover{
+    color: #FF9966;
+}
+.rf-btn{
     color: black;
     background: rgb(221,121,71);
-    background: linear-gradient(90deg, rgba(221,121,71,1) 0%, rgba(226,216,17,1) 35%, rgba(255,243,107,1) 75%, rgba(254,131,49,1) 100%);
+    background: linear-gradient(90deg, rgba(221,121,71,1) 0%, rgba(235,91,14,1) 35%, rgba(251,89,19,1) 75%, rgba(254,131,49,1) 100%);
+    border: 2px solid #E7AB62
+}
+.rf-btn:hover{
+    color: white;
+    background: rgb(226,136,91);
+    background: linear-gradient(90deg, rgba(226,136,91,1) 0%, rgba(233,177,113,1) 35%, rgba(230,168,92,1) 75%, rgba(254,131,49,1) 100%);
+    border: 2px solid #E7AB62
+}
+@media (min-width: 1200px) {
+    .desktop-menu{
+        display: block;
+    }
+    .bm-burger-button{
+        display: none;
+    }
+}
+@media (max-width: 1200px) {
+    .desktop-menu{
+        display: none;
+    }
+    .footer i,a{
+        font-size: smaller;
+    }
+    /* Position and sizing of burger button */
+    .bm-burger-button {
+        display: block;
+        position: absolute;
+        width: 36px;
+        height: 30px;
+        right: 5px;
+        top: 25px;
+    }
+    /* Color/shape of burger icon bars */
+    .bm-burger-bars {
+        background: black;
+    }
+    /* Color/shape of burger icon bars on hover*/
+    .bm-burger-bars-hover {
+        background: #a90000;
+    }
+    /* Position and sizing of clickable cross button */
+    .bm-cross-button {
+        height: 24px;
+        width: 24px;
+    }
+    /* Color/shape of close button cross */
+    .bm-cross {
+        background: #bdc3c7;
+    }
+    /*
+    Sidebar wrapper styles
+    Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+    */
+    .bm-menu-wrap {
+        position: fixed;
+        top:0;
+        height: 100%;
+    }
+    /* General sidebar styles */
+    .bm-menu {
+        background: rgb(221,121,71);
+        background: linear-gradient(0deg, rgba(221,121,71,1) 0%, rgba(235,91,14,1) 35%, rgba(251,89,19,1) 75%, rgba(254,131,49,1) 100%);
+        padding: 2.5em 1.5em 0;
+        font-size: 1.15em;
+    }
+    /* Morph shape necessary with bubble or elastic */
+    .bm-morph-shape {
+        fill: #373a47;
+    }
+    /* Wrapper for item list */
+    .bm-item-list {
+        color: #b8b7ad;
+        padding: 0.8em;
+    }
+    /* Individual item */
+    .bm-item {
+        display: inline-block;
+        color: #d1d1d1;
+        margin-bottom: 10px;
+        text-align: left;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    .bm-item:hover {
+        color: #ffffff;
+    }
+    /* Styling of overlay */
+    .bm-overlay {
+        background: rgba(0, 0, 0, 0.3);
+    }
 }

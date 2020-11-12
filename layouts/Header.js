@@ -2,11 +2,11 @@ import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import NavBar from './NavBar'
-import { Col, Row } from 'reactstrap'
+import { Button, Col, Row } from 'reactstrap'
 
 const headerStyle = {
     color: "white",
-    height: "50px",
+    height: "80px",
     background: "rgb(221,121,71)",
     background: "linear-gradient(90deg, rgba(221,121,71,1) 0%, rgba(235,91,14,1) 35%, rgba(251,89,19,1) 75%, rgba(254,131,49,1) 100%)",
     borderBottom: "solid 2px black"
@@ -22,17 +22,16 @@ function Header() {
         <div className="col shadow" style={headerStyle}>
             <div className="container">
                 <Row>
-                    <Col xs="5" className="pt-2">
+                    <Col xs="4" className="pt-2">
                         <Link href="/">
-                            <a style={{color: "black"}}><b>RenoFacile.dz</b></a>
+                            <a style={{color: "black"}}><img src="rf_logo_1.png" height="60" alt="RenoFacile.dz"/></a>
                         </Link>
                     </Col>
-                    <Col>
-                        <NavBar />
-                    </Col>
+                    <NavBar />
                 </Row>
             </div>
         </div>
+        
     </div>
     )
 }

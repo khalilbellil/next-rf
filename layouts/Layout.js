@@ -5,9 +5,9 @@ import Header from "./Header";
 
 export default function Layout(props) {
     return (
-        <div className="layout">
+        <div className="layout" id="App">
             <Header />
-            <div className="content" >
+            <div className="content" id="page-wrap">
                 {props.children}
             </div>
             <Footer/>
