@@ -8,7 +8,6 @@ export default function Faq() {
             <br/>
             <h4>Je veux trouver un entrepreneur pour réaliser mes travaux, comment pouvez-vous m'aider ?</h4>
             <h5>En remplissant <Link className="col" href="/demande-de-soumission">ce formulaire</Link>, nous vous trouvons des entrepreneurs qualifiés de votre région dans les meilleurs délais possible.</h5>
-            
         </div>
     )
 }
