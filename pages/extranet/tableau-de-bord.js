@@ -9,7 +9,7 @@ export default function tableauDeBord() {
             <button onClick={signIn}>Sign in</button>
         </>}
         {session && <>
-            Signed in as {session.user.email} <br/>
+            Hello {session.user.name}, your are signed in as {session.user.email} <br/>
             <button onClick={signOut}>Sign out</button>
         </>}
     </>
