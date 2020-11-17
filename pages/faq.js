@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Faq() {
     return (
-        <div className="container pt-3 pb-5">
+        <div className="container pt-3 pb-5 rf-content">
             <h2>Foire aux questions</h2>
             <br/>
             <h4>Je veux trouver un entrepreneur pour réaliser mes travaux, comment pouvez-vous m'aider ?</h4>

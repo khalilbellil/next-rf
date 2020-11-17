@@ -4,7 +4,7 @@ import "../styles/main.css"
 import Layout from '../layouts/Layout'
 
 function MyApp({ Component, pageProps }) {
-    return <Layout><br/><Component {...pageProps} /><br/></Layout>
+    return <Layout><Component {...pageProps} /></Layout>
 }
 
 export default MyApp

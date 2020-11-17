@@ -5,7 +5,7 @@ import ContractorMainForm from '../components/ContractorMainForm'
 
 export default function InscriptionEntrepreneur() {
     return (
-        <div className="container pb-5">
+        <div className="container pt-3 pb-5 rf-content">
             <Link href="/connexion-entrepreneur" style={{position:"absolute", right:"0", top:"5"}}>
                 <Button outline color="warning" style={{color:"black",position:"absolute", right:"21%"}}>Déjà inscrit? Connecte toi ici</Button>
             </Link>

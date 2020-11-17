@@ -4,6 +4,9 @@ h1,h3,h4{
 .content {
     min-height: calc(100vh - 70px);
 }
+.rf-content{
+    margin-bottom: 2%;
+}
 .footer {
     height: 50px;
 }
@@ -69,6 +72,9 @@ h1,h3,h4{
     }
 }
 @media (max-width: 1200px) {
+    .rf-content{
+        margin-bottom: 5%;
+    }
     .desktop-menu{
         display: none;
     }

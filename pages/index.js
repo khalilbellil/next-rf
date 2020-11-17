@@ -4,7 +4,7 @@ import MainForm from "../components/MainForm";
 
 export default function Home() {
   return (
-        <div className="container pt-3 pb-5">
+        <div className="container pt-3 pb-5 rf-content">
           <main>
             <h1 className="text-center pb-2" style={{color: "#ED5B0F"}}>Trouver un entrepreneur gratuitement en 2 étapes</h1>
             <Row className="home_content text-center">
@@ -22,12 +22,9 @@ export default function Home() {
             </Row>
             <br/>
             <Row>
-              <div className="col-md-6 home_card">
+              <div className="col home_card">
                 <h3 className="text-center">Trouver un entrepreneur</h3>
                 <MainForm/>
-              </div>
-              <div className="col-md-6 home_card">
-                a
               </div>
             </Row>
           </main>
