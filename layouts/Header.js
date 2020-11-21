@@ -9,16 +9,14 @@ const headerStyle = {
     height: "80px",
     background: "rgb(221,121,71)",
     background: "linear-gradient(90deg, rgba(221,121,71,1) 0%, rgba(235,91,14,1) 35%, rgba(251,89,19,1) 75%, rgba(254,131,49,1) 100%)",
-    borderBottom: "solid 2px black"
+    borderBottom: "solid 2px black",
+    position: "fixed",
+    zIndex: "1",
 };
 
 function Header() {
     return (
     <div>
-        <Head>
-            <title>RenoFacile.dz</title>
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
         <div className="col shadow" style={headerStyle}>
             <div className="container">
                 <Row>
