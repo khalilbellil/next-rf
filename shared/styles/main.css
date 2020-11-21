@@ -1,3 +1,6 @@
+body{
+    min-height: 750rem!important;
+}
 h1,h3,h4{
     color: #ED5B0F;
 }
@@ -5,9 +8,7 @@ h1,h3,h4{
     min-height: calc(100vh - 70px);
 }
 .rf-content{
-    margin-top: 80px;
     margin-bottom: 2%;
-    min-height: 75rem;
 }
 .footer {
     height: 50px;

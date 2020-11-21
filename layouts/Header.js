@@ -9,15 +9,12 @@ const headerStyle = {
     height: "80px",
     background: "rgb(221,121,71)",
     background: "linear-gradient(90deg, rgba(221,121,71,1) 0%, rgba(235,91,14,1) 35%, rgba(251,89,19,1) 75%, rgba(254,131,49,1) 100%)",
-    borderBottom: "solid 2px black",
-    position: "fixed",
-    zIndex: "1",
+    borderBottom: "solid 2px black"
 };
 
 function Header() {
     return (
-    <div>
-        <div className="col shadow" style={headerStyle}>
+        <div className="col shadow fixed-top" style={headerStyle}>
             <div className="container">
                 <Row>
                     <Col xs="4" className="pt-2">
@@ -29,8 +26,6 @@ function Header() {
                 </Row>
             </div>
         </div>
-        
-    </div>
     )
 }
 
