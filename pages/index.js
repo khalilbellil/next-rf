@@ -23,7 +23,7 @@ export default function Home() {
             <br/>
             <Row>
               <div className="col home_card">
-                <h3 className="text-center">Trouver un entreprenecurvvv</h3>
+                <h3 className="text-center">Trouver un entrepreneur</h3>
                 <MainForm/>
               </div>
             </Row>
