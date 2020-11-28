@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { Button } from 'reactstrap'
-import ContractorMainForm from '../components/ContractorMainForm'
+import ContractorMainForm from '../../components/ContractorMainForm'
 
 export default function InscriptionEntrepreneur() {
     return (

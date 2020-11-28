@@ -1,16 +1,20 @@
 import React from 'react'
 import { Button, Form, FormFeedback, FormGroup, FormText, Input, Label } from 'reactstrap'
 
-export default function MainForm() {
+export default function IntranetMainForm() {
     const handleSubmit = (e) => {
         e.preventDefault()
-        alert("wrgwrgwrg")
+        alert("a")
     }
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup>
-                <Label for="name">Votre nom*</Label>
-                <Input name="name" required/>
+                <Label for="lastName">Votre nom*</Label>
+                <Input name="lastName" required/>
+            </FormGroup>
+            <FormGroup>
+                <Label for="firstName">Votre prenom*</Label>
+                <Input name="firstName" required/>
             </FormGroup>
             <FormGroup>
                 <Label for="email">Votre courriel*</Label>
@@ -24,22 +28,17 @@ export default function MainForm() {
                 <FormFeedback invalid>Numéro invalide !</FormFeedback>
             </FormGroup>
             <FormGroup>
-                <Label for="address">Adresse</Label>
-                <Input name="address"/>
-                <FormText>L'adresse du lieu où auront lieu les travaux</FormText>
+                <Label for="password">Votre numéro de téléphone*</Label>
+                <Input name="password" type="phone" required/>
+                <FormFeedback invalid>Numéro invalide !</FormFeedback>
             </FormGroup>
             <FormGroup>
-                <Label for="description">Description de votre projet*</Label>
-                <Input name="description" type="textarea" required/>
-                <FormText>Exemple: Je voudrais refaire ma salle de bain au complet.</FormText>
+                <Label for="phone">Votre numéro de téléphone*</Label>
+                <Input name="phone" type="phone" required/>
+                <FormFeedback invalid>Numéro invalide !</FormFeedback>
             </FormGroup>
-            {/* <FormGroup>
-                <Label for="budget">Votre budget approximatif</Label>
-                <Input name="budget"/>
-                <FormText>Exemple: Entre 10 000 et 20 000 dinars</FormText>
-            </FormGroup> */}
             <br/>
-            <Button className="rf-btn pl-5 pr-5 col" type="submit" style={{color: "white"}}>Recevoir une soumission</Button>
+            <Button className="rf-btn pl-5 pr-5 col" type="submit" style={{color: "white"}}>S'inscrire en tant qu'employé</Button>
         </Form>
     )
 }

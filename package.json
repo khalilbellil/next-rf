@@ -1,17 +1,22 @@
 {
-  "name": "learn-starter",
+  "name": "next-rf",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "compile-scss": "sass assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css",
+    "minify-sass": "sass assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.min.css",
+    "map-sass": "sass assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.3",
+    "chart.js": "^2.9.4",
+    "classnames": "2.2.6",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "date-fns": "^2.16.1",
@@ -22,10 +27,15 @@
     "next": "^10.0.1",
     "next-auth": "^3.1.0",
     "nodemailer": "^6.4.16",
+    "perfect-scrollbar": "^1.5.0",
+    "prop-types": "15.7.2",
     "react": "16.13.1",
     "react-burger-menu": "^2.9.0",
+    "react-chartjs-2": "^2.11.1",
     "react-dom": "16.13.1",
+    "react-notification-alert": "0.0.12",
     "reactstrap": "^8.6.0",
+    "sass": "^1.29.0",
     "serverless-mysql": "^1.5.4",
     "sql-template-strings": "^2.2.2"
   },

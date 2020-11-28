@@ -19,7 +19,7 @@ function Header() {
                 <Row>
                     <Col xs="4" className="pt-2">
                         <Link href="/">
-                            <a style={{color: "black"}}><img src="rf_logo_1.png" height="60" alt="RenoFacile.dz"/></a>
+                            <a style={{color: "black"}}><img src="../rf_logo_1.png" height="60" alt="RenoFacile.dz"/></a>
                         </Link>
                     </Col>
                     <NavBar />

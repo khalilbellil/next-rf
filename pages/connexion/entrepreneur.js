@@ -1,5 +1,5 @@
 import React from 'react'
-import SignInSide from '../components/SignInSide'
+import SignInSide from '../../components/SignInSide'
 
 export default function ConnexionEntrepreneur() {
     return (
