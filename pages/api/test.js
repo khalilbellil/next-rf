@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
         LIMIT 10
     `)
     res.status(200).json({
-        test: "allo",
+        test: req.query.test,
         users: users
     })
 }

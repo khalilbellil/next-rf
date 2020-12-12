@@ -4,17 +4,20 @@ import { Button, Form, FormFeedback, FormGroup, FormText, Input, Label } from 'r
 export default function IntranetMainForm() {
     const handleSubmit = (e) => {
         e.preventDefault()
-        alert("a")
+        fetch('/api/test')
+        .then(response => response.json())
+        .then(response => console.log("RESPONSE: ", response))
+        .catch(err => console.log("ERROR: ", err))
     }
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup>
-                <Label for="lastName">Votre nom*</Label>
-                <Input name="lastName" required/>
+                <Label for="last_name">Votre nom*</Label>
+                <Input name="last_name" required/>
             </FormGroup>
             <FormGroup>
-                <Label for="firstName">Votre prenom*</Label>
-                <Input name="firstName" required/>
+                <Label for="first_name">Votre prenom*</Label>
+                <Input name="first_name" required/>
             </FormGroup>
             <FormGroup>
                 <Label for="email">Votre courriel*</Label>

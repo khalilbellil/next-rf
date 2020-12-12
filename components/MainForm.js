@@ -4,10 +4,25 @@ import { Button, Form, FormFeedback, FormGroup, FormText, Input, Label } from 'r
 export default function MainForm() {
     const handleSubmit = (e) => {
         e.preventDefault()
-        alert("wrgwrgwrg")
+        fetch('/api/visitor/demande-de-soumission', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: e.target[0].value,
+                email: e.target[1].value,
+                phone: e.target[2].value,
+                address: e.target[3].value,
+                city: e.target[4].value,
+                description: e.target[5].value,
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
     }
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} method="POST">
             <FormGroup>
                 <Label for="name">Votre nom*</Label>
                 <Input name="name" required/>
@@ -26,6 +41,8 @@ export default function MainForm() {
             <FormGroup>
                 <Label for="address">Adresse</Label>
                 <Input name="address"/>
+                <Label for="city">Ville</Label>
+                <Input name="city"/>
                 <FormText>L'adresse du lieu où auront lieu les travaux</FormText>
             </FormGroup>
             <FormGroup>
@@ -33,11 +50,6 @@ export default function MainForm() {
                 <Input name="description" type="textarea" required/>
                 <FormText>Exemple: Je voudrais refaire ma salle de bain au complet.</FormText>
             </FormGroup>
-            {/* <FormGroup>
-                <Label for="budget">Votre budget approximatif</Label>
-                <Input name="budget"/>
-                <FormText>Exemple: Entre 10 000 et 20 000 dinars</FormText>
-            </FormGroup> */}
             <br/>
             <Button className="rf-btn pl-5 pr-5 col" type="submit" style={{color: "white"}}>Recevoir une soumission</Button>
         </Form>
