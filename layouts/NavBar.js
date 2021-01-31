@@ -31,7 +31,7 @@ export default function NavBar() {
                 <Link className="col" href="/demande-de-soumission">
                     <Button outline color="warning" style={{ color: "white" }}>Vous cherchez un entrepreneur?</Button>
                 </Link>
-                <Link className="col" href="/inscription-entrepreneur">
+                <Link className="col" href="/inscription/entrepreneur">
                     <Button className="ml-2" outline color="warning" style={{ color: "black" }}>Vous êtes un entrepreneur?</Button>
                 </Link>
             </Row>
@@ -52,7 +52,7 @@ export default function NavBar() {
                 </Link>
                 <br />
                 <br />
-                <Link href="/inscription-entrepreneur">
+                <Link href="/inscription/entrepreneur">
                     <Button outline color="warning" style={{ color: "black" }} onClick={() => toggle()}>Vous êtes un entrepreneur?</Button>
                 </Link>
             </Menu>
