@@ -9,5 +9,6 @@ module.exports = {
         SQL_RENOFACILE_DZ_USERNAME : 'root', 
         MYSQL_DATABASE : 'renofacile', 
         SQL_RENOFACILE_DZ_PASSWORD : 'Kookie&09'
+        //SQL_RENOFACILE_DZ_PASSWORD : 'abc123...'
     },
 }
