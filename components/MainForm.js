@@ -1,5 +1,7 @@
 import React from 'react'
 import { Button, Form, FormFeedback, FormGroup, FormText, Input, Label } from 'reactstrap'
+import Popup from 'reactjs-popup'
+import 'reactjs-popup/dist/index.css'
 
 export default function MainForm() {
     const handleSubmit = (e) => {
@@ -30,13 +32,13 @@ export default function MainForm() {
             <FormGroup>
                 <Label for="email">Votre courriel*</Label>
                 <Input name="email" type="email" required/>
-                <FormFeedback invalid>Ceci n'est pas un courriel valide !</FormFeedback>
+                <FormFeedback>Ceci n'est pas un courriel valide !</FormFeedback>
                 <FormText>Exemple: hamza@exemple.dz</FormText>
             </FormGroup>
             <FormGroup>
                 <Label for="phone">Votre numéro de téléphone*</Label>
                 <Input name="phone" type="phone" required/>
-                <FormFeedback invalid>Numéro invalide !</FormFeedback>
+                <FormFeedback>Numéro invalide !</FormFeedback>
             </FormGroup>
             <FormGroup>
                 <Label for="address">Adresse</Label>
@@ -51,7 +53,10 @@ export default function MainForm() {
                 <FormText>Exemple: Je voudrais refaire ma salle de bain au complet.</FormText>
             </FormGroup>
             <br/>
-            <Button className="rf-btn pl-5 pr-5 col" type="submit" style={{color: "white"}}>Recevoir une soumission</Button>
+            {/* <Button className="rf-btn pl-5 pr-5 col" type="submit" style={{color: "white"}}>Recevoir une soumission</Button> */}
+            <Popup trigger={<button className="rf-btn pl-5 pr-5 col" type="submit" style={{color: "white"}}>Recevoir une soumission</button>} position="right center">
+                <div>Votre demande a bien été reçu. Nous allons vous mettre en relations avec des entrepreneurs qualifiés dans les meilleurs délais.</div>
+            </Popup>
         </Form>
     )
 }
