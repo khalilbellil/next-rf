@@ -28,7 +28,7 @@ export async function sendEmail(_to, _subject, _html, _from = 'RenoFacile.ma <no
     });
     return true
 }
-export async function sendEmailByCode(_to, _id_email, _from = 'RenoFacile.ma <noreply@renofacile.ma>'){
+export async function sendEmailById(_to, _id_email, _from = 'RenoFacile.ma <noreply@renofacile.ma>'){
     const email_result = await getQuery(`SELECT content, subject FROM email WHERE id='${_id_email}' LIMIT 1`)[0]
     var mailOptions = {
         from: _from,
