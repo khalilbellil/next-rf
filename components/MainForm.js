@@ -21,6 +21,14 @@ export default function MainForm() {
                 'Content-Type': 'application/json'
             }
         })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success === 'yes'){
+                alert('success')
+            }else{
+                alert('error')
+            }
+        })
         .catch(err => console.log("ERROR: ", err))
     }
     return (

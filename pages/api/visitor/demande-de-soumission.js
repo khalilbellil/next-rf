@@ -1,4 +1,5 @@
 const db = require('../../../lib/db')
+const automail = require('../../../rf_toolbox/automail')
 
 module.exports = async (req, res) => {
     let { name, email, phone, address, city, description } = req.body
@@ -15,7 +16,6 @@ module.exports = async (req, res) => {
                 insert_client = await db.query(`UPDATE client SET id_address='${insert_address.insertId}', 
                 email='${email}', name='${name}', phone='${phone}' WHERE id=${exist_client[0].id}`)
                 uid_client = exist_client[0].id
-                console.log('exist_client[0].id', exist_client[0].id)
             }else{
                 //create client
                 insert_client = await db.query(`INSERT INTO client(id_address, email, name, phone) 
@@ -23,18 +23,19 @@ module.exports = async (req, res) => {
                 uid_client = insert_client.insertId
             }
         }
-        console.log('TEST', insert_client.insertId)
         if (insert_address.insertId && uid_client) {
             //create project
             insert_project = await db.query(`INSERT INTO project(id_client, id_address, id_project_status, description) 
-                VALUES('${insert_client.insertId}', '${insert_address.insertId}', 1, '${description}')`)
+                VALUES('${uid_client}', '${insert_address.insertId}', 1, '${description}')`)
         }
 
         var success = 'no'
         if(insert_project?.insertId){
             success = 'yes'
+            automail.sendEmail(email, 'RenoFacile.ma - Confirmation de votre demande', `Bonjour <b>${name}</b>,<br>
+            ceci est pour vous confirmer que nous avons bien recu votre <b>demande de mise en relation avec un entrepreneur</b> et allons la traiter dans les plus bref délais.<br>
+            Merci pour votre compréhension.`)
         }
-        console.log("RES: ", success)
     }
     res.status(200).json({
         success: success
