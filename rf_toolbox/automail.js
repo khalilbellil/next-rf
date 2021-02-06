@@ -39,9 +39,11 @@ export async function sendEmailById(_to, _id_email, _from = 'RenoFacile.ma <nore
     transporter.sendMail(mailOptions, async function(error, info){
         if (error) {
             console.log(error);
+            //todo: insert error into email_log
             return error
         } else {
             console.log('Resultat de l\'envoie du courriel : ' + info.response);
+            //todo: insert success into email_log
             return true
         }
     });

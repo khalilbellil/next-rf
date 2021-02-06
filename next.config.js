@@ -7,7 +7,7 @@ module.exports = {
         FACEBOOK_CLIENT_SECRET : 'a6fc6bdc0da8ad6f1a71b3ec58ba2cb1',
         SQL_RENOFACILE_DZ_IP : 'localhost', 
         SQL_RENOFACILE_DZ_USERNAME : 'root', 
-        MYSQL_DATABASE : 'renofacile', 
+        MYSQL_DB : 'renofacile', 
         SQL_RENOFACILE_DZ_PASSWORD : 'Kookie&09'
         //SQL_RENOFACILE_DZ_PASSWORD : 'abc123...'
     },
