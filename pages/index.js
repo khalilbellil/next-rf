@@ -1,5 +1,6 @@
 import { Col, Row } from "reactstrap";
 import Link from 'next/link'
+import Head from 'next/head'
 import MainForm from "../components/MainForm";
 
 export default function Home() {
