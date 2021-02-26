@@ -7,7 +7,7 @@ export default function Home() {
   return (
         <div className="container pt-3 pb-5 rf-content">
           <Head>
-            <title>RenoFacile.ma | Trouver un entrepreneur en rénovation gratuitement</title>
+            <title>RenovationFacile.fr | Trouver un entrepreneur en rénovation gratuitement</title>
           </Head>
           <main>
             <h1 className="text-center pb-2" style={{color: "#ED5B0F"}}>Trouver un entrepreneur gratuitement en 2 étapes</h1>
