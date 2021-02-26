@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { Button } from 'reactstrap'
-import IntranetMainForm from '../../components/IntranetMainForm'
+// import IntranetMainForm from '../../components/IntranetMainForm'
 
 export default function InscriptionInterne() {
     return (
@@ -13,7 +13,7 @@ export default function InscriptionInterne() {
             <br/>
             <h3>Inscription intranet</h3>
             <br/>
-            <IntranetMainForm />
+            {/* <IntranetMainForm /> */}
         </div>
     )
 }
