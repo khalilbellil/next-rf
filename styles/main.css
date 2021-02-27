@@ -55,15 +55,11 @@ h1,h3,h4{
 }
 .rf-btn{
     color: black;
-    background: rgb(221,121,71);
-    background: linear-gradient(90deg, rgba(221,121,71,1) 0%, rgba(235,91,14,1) 35%, rgba(251,89,19,1) 75%, rgba(254,131,49,1) 100%);
-    border: 2px solid #E7AB62
+    background: rgb(0,0,0);
 }
 .rf-btn:hover{
     color: white;
-    background: rgb(226,136,91);
-    background: linear-gradient(90deg, rgba(226,136,91,1) 0%, rgba(233,177,113,1) 35%, rgba(230,168,92,1) 75%, rgba(254,131,49,1) 100%);
-    border: 2px solid #E7AB62
+    background: rgb(80, 80, 80);
 }
 @media (min-width: 1200px) {
     .desktop-menu{

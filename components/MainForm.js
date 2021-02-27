@@ -2,8 +2,10 @@ import React from 'react'
 import { Button, Form, FormFeedback, FormGroup, FormText, Input, Label } from 'reactstrap'
 import Popup from 'reactjs-popup'
 import 'reactjs-popup/dist/index.css'
+import { useRouter } from 'next/router'
 
 export default function MainForm() {
+    const router = useRouter()
     const handleSubmit = (e) => {
         e.preventDefault()
         fetch('/api/visitor/add-new-project', {
@@ -24,15 +26,15 @@ export default function MainForm() {
         .then(res => res.json())
         .then(res => {
             if(res.success === 'yes'){
-                alert('success')
+                router.push('/confirmation-de-soumission')
             }else{
-                alert('error')
+                alert('Une erreur est survenue, merci de nous contactez directement.')
             }
         })
         .catch(err => console.log("ERROR: ", err))
     }
     return (
-        <Form onSubmit={handleSubmit} method="POST">
+        <Form onSubmit={handleSubmit} method="POST" className="p-3" style={{border:'2px solid black', borderRadius:'10px'}}>
             <FormGroup>
                 <Label for="name">Votre nom*</Label>
                 <Input name="name" required/>
@@ -41,7 +43,7 @@ export default function MainForm() {
                 <Label for="email">Votre courriel*</Label>
                 <Input name="email" type="email" required/>
                 <FormFeedback>Ceci n'est pas un courriel valide !</FormFeedback>
-                <FormText>Exemple: jean@exemple.fr</FormText>
+                <FormText>jean@exemple.fr</FormText>
             </FormGroup>
             <FormGroup>
                 <Label for="phone">Votre numéro de téléphone*</Label>
@@ -61,10 +63,7 @@ export default function MainForm() {
                 <FormText>Exemple: Je voudrais refaire ma salle de bain au complet.</FormText>
             </FormGroup>
             <br/>
-            {/* <Button className="rf-btn pl-5 pr-5 col" type="submit" style={{color: "white"}}>Recevoir une soumission</Button> */}
-            <Popup trigger={<button className="rf-btn pl-5 pr-5 col" type="submit" style={{color: "white"}}>Recevoir une soumission</button>} position="right center">
-                <div>Votre demande a bien été reçu. Nous allons vous mettre en relations avec des entrepreneurs qualifiés dans les meilleurs délais.</div>
-            </Popup>
+            <Button className="rf-btn col" type="submit" style={{color: "white"}}>Recevoir une soumission</Button>
         </Form>
     )
 }

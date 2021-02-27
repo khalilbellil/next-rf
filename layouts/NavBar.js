@@ -25,9 +25,9 @@ export default function NavBar() {
                 <Link className="col" href="/faq">
                     <a className="pr-3">FAQ</a>
                 </Link>
-                <Link className="col" href="/a-propos">
+                {/* <Link className="col" href="/a-propos">
                     <a className="pr-3">À propos</a>
-                </Link>
+                </Link> */}
                 <Link className="col" href="/demande-de-soumission">
                     <Button outline color="warning" style={{ color: "white" }}>Vous cherchez un entrepreneur?</Button>
                 </Link>

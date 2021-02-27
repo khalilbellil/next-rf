@@ -27,10 +27,12 @@ export default function Home() {
             <br/>
             <Row>
               <div className="col home_card">
-                <h3 className="text-center">Trouver un entrepreneur</h3>
+                <h3 className="text-center" style={{color: 'black'}}>Remplissez ce formulaire pour trouver un entrepreneur en rénovation</h3>
                 <MainForm/>
               </div>
             </Row>
+            <br/>
+            <br/>
           </main>
         </div>
   )
