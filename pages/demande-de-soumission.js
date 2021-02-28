@@ -5,7 +5,7 @@ import MainForm from '../components/MainForm'
 export default function DemandeDeSoumission() {
     return (
         <div className="container pt-4 pb-5 rf-content">
-            <h3>Remplissez ce formulaire pour qu'un entrepreneur qualifié vous appelle</h3>
+            <h3 className="text-center">Remplissez ce formulaire pour qu'un entrepreneur qualifié vous appelle</h3>
             <br/>
             <MainForm/>
         </div>

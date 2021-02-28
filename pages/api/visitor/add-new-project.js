@@ -3,6 +3,7 @@ const automail = require('../../../rf_toolbox/automail')
 
 module.exports = async (req, res) => {
     let { name, email, phone, address, city, description } = req.body
+    var success = 'no'
     if(name && email && phone && description){
         let insert_address, insert_client, insert_project, uid_client = undefined
         if(address && phone){
@@ -28,13 +29,12 @@ module.exports = async (req, res) => {
             insert_project = await db.query(`INSERT INTO project(id_client, id_address, id_project_status, description) 
                 VALUES('${uid_client}', '${insert_address.insertId}', 1, '${description}')`)
         }
-
-        var success = 'no'
         if(insert_project?.insertId){
             success = 'yes'
-            automail.sendEmail(email, 'RenoFacile.ma - Confirmation de votre demande', `Bonjour <b>${name}</b>,<br>
-            ceci est pour vous confirmer que nous avons bien recu votre <b>demande de mise en relation avec un entrepreneur</b> et allons la traiter dans les plus bref délais.<br>
-            Merci pour votre compréhension.`)
+            // automail.sendEmail(email, 'RenoFacile.ma - Confirmation de votre demande', `Bonjour <b>${name}</b>,<br>
+            // ceci est pour vous confirmer que nous avons bien recu votre <b>demande de mise en relation avec un entrepreneur</b> et allons la traiter dans les plus bref délais.<br>
+            // Merci pour votre compréhension.`)
+            automail.sendEmailById(email, 1)
         }
     }
     res.status(200).json({

@@ -15,8 +15,7 @@ export default function MainForm() {
                 email: e.target[1].value,
                 phone: e.target[2].value,
                 address: e.target[3].value,
-                city: e.target[4].value,
-                description: e.target[5].value,
+                description: e.target[4].value,
             }),
             headers: {
                 'Accept': 'application/json',
@@ -26,7 +25,7 @@ export default function MainForm() {
         .then(res => res.json())
         .then(res => {
             if(res.success === 'yes'){
-                router.push('/confirmation-de-soumission')
+                router.push('/confirmation-de-soumission').then(() => window.scrollTo(0, 0))
             }else{
                 alert('Une erreur est survenue, merci de nous contactez directement.')
             }
@@ -36,32 +35,32 @@ export default function MainForm() {
     return (
         <Form onSubmit={handleSubmit} method="POST" className="p-3" style={{border:'2px solid black', borderRadius:'10px'}}>
             <FormGroup>
-                <Label for="name">Votre nom*</Label>
+                <Label for="name">Votre nom <b style={{color:"#ED5B0F"}}>*</b></Label>
                 <Input name="name" required/>
             </FormGroup>
             <FormGroup>
-                <Label for="email">Votre courriel*</Label>
+                <Label for="email">Votre courriel <b style={{color:"#ED5B0F"}}>*</b></Label>
                 <Input name="email" type="email" required/>
                 <FormFeedback>Ceci n'est pas un courriel valide !</FormFeedback>
                 <FormText>jean@exemple.fr</FormText>
             </FormGroup>
             <FormGroup>
-                <Label for="phone">Votre numéro de téléphone*</Label>
+                <Label for="phone">Votre numéro de téléphone <b style={{color:"#ED5B0F"}}>*</b></Label>
                 <Input name="phone" type="phone" required/>
                 <FormFeedback>Numéro invalide !</FormFeedback>
             </FormGroup>
             <FormGroup>
                 <Label for="address">Adresse</Label>
                 <Input name="address"/>
-                <Label for="city">Ville</Label>
-                <Input name="city"/>
                 <FormText>L'adresse du lieu où auront lieu les travaux</FormText>
             </FormGroup>
             <FormGroup>
-                <Label for="description">Description de votre projet*</Label>
+                <Label for="description">Description de votre projet <b style={{color:"#ED5B0F"}}>*</b></Label>
                 <Input name="description" type="textarea" required/>
                 <FormText>Exemple: Je voudrais refaire ma salle de bain au complet.</FormText>
             </FormGroup>
+            <b style={{color:"#ED5B0F"}}>*</b><i style={{fontSize: "12px"}}> Champs requis</i>
+            <br/>
             <br/>
             <Button className="rf-btn col" type="submit" style={{color: "white"}}>Recevoir une soumission</Button>
         </Form>

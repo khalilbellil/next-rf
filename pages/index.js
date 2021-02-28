@@ -10,7 +10,7 @@ export default function Home() {
             <title>RenovationFacile.fr | Trouver un entrepreneur en rénovation gratuitement</title>
           </Head>
           <main>
-            <h1 className="text-center pb-2" style={{color: "#ED5B0F"}}>Trouver un entrepreneur gratuitement en 2 étapes</h1>
+            <h1 className="text-center pb-2">Trouver un entrepreneur gratuitement en 2 étapes</h1>
             <Row className="home_content text-center">
               <div className="col-md-6 home_card">
                 <h2>1</h2>
@@ -27,8 +27,8 @@ export default function Home() {
             <br/>
             <Row>
               <div className="col home_card">
-                <h3 className="text-center" style={{color: 'black'}}>Remplissez ce formulaire pour trouver un entrepreneur en rénovation</h3>
-                <MainForm/>
+                <h3 className="text-center">Remplissez ce formulaire pour trouver un entrepreneur en rénovation</h3>
+                <MainForm />
               </div>
             </Row>
             <br/>

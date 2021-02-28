@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const db = require('../lib/db');
 
 let transporter = nodemailer.createTransport({
     host: 'mail.smtp2go.com', // <= your smtp server here
@@ -10,7 +11,7 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-export async function sendEmail(_to, _subject, _html, _from = 'RenoFacile.ma <noreply@renofacile.ma>'){
+export async function sendEmail(_to, _subject, _html, _from = 'RenovationFacile.fr <contact@renovationfacile.fr>'){
     var mailOptions = {
         from: _from,
         to: _to,
@@ -28,13 +29,22 @@ export async function sendEmail(_to, _subject, _html, _from = 'RenoFacile.ma <no
     });
     return true
 }
-export async function sendEmailById(_to, _id_email, _from = 'RenoFacile.ma <noreply@renofacile.ma>'){
-    const email_result = await getQuery(`SELECT content, subject FROM email WHERE id='${_id_email}' LIMIT 1`)[0]
+export async function sendEmailById(_to, _id_email, _from = 'RenovationFacile.fr <contact@renovationfacile.fr>'){
+    const email_result = await db.query(`SELECT content, subject, id_email_template FROM email WHERE id='${_id_email}' LIMIT 1`)
+    let content = ''
+    if(email_result[0].id_email_template){
+        const email_template_result = await db.query(`SELECT email_start, email_end FROM email_template WHERE id='${email_result[0].id_email_template}' LIMIT 1`)
+        content += email_template_result[0].email_start
+        content += email_result[0].content
+        content += email_template_result[0].email_end
+    }else{
+        content += email_result[0].content
+    }
     var mailOptions = {
         from: _from,
         to: _to,
-        subject: email_result.subject,
-        html: email_result.content
+        subject: email_result[0].subject,
+        html: content
     };
     transporter.sendMail(mailOptions, async function(error, info){
         if (error) {
