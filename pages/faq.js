@@ -12,7 +12,7 @@ export default function Faq() {
             <h4>Qu'est-ce que RenovationFacile.fr ?</h4>
             <h5>Renovationfacile.fr est une plateforme de mise en relation entre les entrepreneurs en rénovation et les clients.</h5>
             <br/>
-            <h4>Comment je reçoit mon devis ?</h4>
+            <h4>Comment je reçois mon devis ?</h4>
             <h5>Après avoir rempli le formulaire avec les détails sur votre projet de rénovation, un ou plusieurs entrepreneurs vous contacteront pour vous proposer un devis pour les travaux.</h5>
             <br/>
             <h4>Est-ce que le service est gratuit ?</h4>
