@@ -15,7 +15,7 @@ export default function Faq() {
             <h4>Comment je reçoit mon devis ?</h4>
             <h5>Après avoir rempli le formulaire avec les détails sur votre projet de rénovation, un ou plusieurs entrepreneurs vous contacteront pour vous proposer un devis pour les travaux.</h5>
             <br/>
-            <h4>Est-ce le service est gratuit ?</h4>
+            <h4>Est-ce que le service est gratuit ?</h4>
             <h5>Ce service (recevoir des devis) est totalement gratuit pour les clients.</h5>
             <br/>
             <h4>Comment puis-je m'assurer de la qualité des entrepreneurs ?</h4>
