@@ -1,5 +1,4 @@
 import React from 'react'
-import { signIn, signOut, useSession } from 'next-auth/client'
 
 export default function tableauDeBord() {
     const [ session, loading ] = useSession()
