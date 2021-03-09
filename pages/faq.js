@@ -8,6 +8,7 @@ export default function Faq() {
             <br/>
             <h4>Je veux trouver un entrepreneur pour réaliser mes travaux, comment pouvez-vous m'aider ?</h4>
             <h5>En remplissant <Link className="col" href="/demande-de-devis">ce formulaire</Link>, nous vous trouvons des entrepreneurs qualifiés de votre région dans les meilleurs délais possible.</h5>
+            <br/>
             <h4>Qu'est-ce que RenovationFacile.fr ?</h4>
             <h5>Renovationfacile.fr est une plateforme de mise en relation entre les entrepreneurs en rénovation et les clients.</h5>
             <br/>
