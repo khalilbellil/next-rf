@@ -20,7 +20,7 @@ function Footer() {
             <div className="container">
                 <Row>
                     <Col xs="6" className="pt-2 col-xs-auto"><i>© 2021 RenovationFacile.fr</i></Col>
-                    <Col className="pt-2 col-xs-auto" style={{textAlign: "right"}}><Link className="col" href="/demande-de-devis"><a style={{color:"black"}}>Recevoir une soumission</a></Link></Col>
+                    <Col className="pt-2 col-xs-auto" style={{textAlign: "right"}}><Link className="col" href="/demande-de-devis"><a style={{color:"black"}}>Recevoir un devis</a></Link></Col>
                 </Row>
             </div>
         </div>
