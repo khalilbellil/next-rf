@@ -15,7 +15,7 @@ export default function Home() {
               <div className="col-md-6 home_card">
                 <h2>1</h2>
                 <img className="shadow-top center" src="/home_card_img_step_one.png" width="300"/>
-                <p>Remplir le formulaire <Link href="/demande-de-soumission"><a>"Trouver un entrepreneur" </a></Link>
+                <p>Remplir le formulaire <Link href="/demande-de-devis"><a>"Trouver un entrepreneur" </a></Link>
                 avec les informations concernant votre projet de rénovation.</p>
               </div>
               <div className="col-md-6 home_card">
