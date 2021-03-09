@@ -21,7 +21,7 @@ export default function Home() {
               <div className="col-md-6 home_card">
                 <h2>2</h2>
                 <img className="shadow-top center" src="/home_card_img_step_two.png" width="300"/>
-                <p>Dans 48h à 72h, un à trois entrepreneurs vous contacteront pour vous proposer une soumission pour les travaux.</p>
+                <p>Dans 48h à 72h, un à trois entrepreneurs vous contacteront pour vous proposer un devis pour les travaux.</p>
               </div>
             </Row>
             <br/>

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Form, FormFeedback, FormGroup, FormText, Input, Label } from 'reactstrap'
-import Popup from 'reactjs-popup'
 import 'reactjs-popup/dist/index.css'
 import { useRouter } from 'next/router'
 
@@ -25,7 +24,7 @@ export default function MainForm() {
         .then(res => res.json())
         .then(res => {
             if(res.success === 'yes'){
-                router.push('/confirmation-de-soumission').then(() => window.scrollTo(0, 0))
+                router.push('/confirmation-de-devis').then(() => window.scrollTo(0, 0))
             }else{
                 alert('Une erreur est survenue, merci de nous contactez directement.')
             }
@@ -62,7 +61,7 @@ export default function MainForm() {
             <b style={{color:"#ED5B0F"}}>*</b><i style={{fontSize: "12px"}}> Champs requis</i>
             <br/>
             <br/>
-            <Button className="rf-btn col" type="submit" style={{color: "white"}}>Recevoir une soumission</Button>
+            <Button className="rf-btn col" type="submit" style={{color: "white"}}>Recevoir un devis</Button>
         </Form>
     )
 }
