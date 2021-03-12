@@ -21,7 +21,13 @@ export default function Login() {
         .then(res => res.json())
         .then(res => {
             if(res.success === 'yes'){
-                router.push('/intranet/tableau-de-bord').then(() => window.scrollTo(0, 0))
+                localStorage.setItem('id_user', res.id_user)
+                localStorage.setItem('role', res.role)
+                if(res.role < 4 && res.role > 0){
+                    router.push('/intranet/tableau-de-bord').then(() => window.scrollTo(0, 0))
+                }else if(res.role == 4){
+                    router.push('/extranet/tableau-de-bord').then(() => window.scrollTo(0, 0))
+                }
             }else{
                 alert('Erreur, merci de verifier vos informations')
             }

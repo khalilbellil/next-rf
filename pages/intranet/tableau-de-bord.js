@@ -1,11 +1,13 @@
+
 import React from 'react'
-// import Dashboard from '../../components/Dashboard'
+import Dashboard from '../../components/intranet/Dashboard'
 
 export default function tableauDeBord() {
+    
     return (
-        <div>
+        <div className='container'> 
             <h3>Tableau de bord intranet</h3>
-            {/* <Dashboard/> */}
+            <Dashboard/>
         </div>
     )
 }

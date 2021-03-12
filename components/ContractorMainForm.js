@@ -28,13 +28,13 @@ export default function ContractorMainForm() {
             <FormGroup>
                 <Label for="email">Votre courriel*</Label>
                 <Input name="email" type="email" required />
-                <FormFeedback invalid>Ceci n'est pas un courriel valide !</FormFeedback>
+                <FormFeedback>Ceci n'est pas un courriel valide !</FormFeedback>
                 <FormText>Exemple: hamza@exemple.dz</FormText>
             </FormGroup>
             <FormGroup>
                 <Label for="phone">Votre numéro de téléphone*</Label>
                 <Input name="phone" type="phone" required />
-                <FormFeedback invalid>Numéro invalide !</FormFeedback>
+                <FormFeedback>Numéro invalide !</FormFeedback>
             </FormGroup>
             <FormGroup>
                 <Label for="company_name">Nom de votre entreprise*</Label>

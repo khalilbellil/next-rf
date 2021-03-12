@@ -16,8 +16,10 @@ export default function Layout(props) {
             setLayout('intranet')
         }else if (path.includes('extranet')){
             setLayout('extranet')
+        }else{
+            setLayout('')
         }
-    }, [])
+    }, [router.pathname])
     return (
         <div className="layout" id="App">
             {(layout === '')?<Header/>:(layout === 'extranet')?<ExtranetHeader/>:(layout === 'intranet')?<IntranetHeader/>:""}
