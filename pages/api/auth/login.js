@@ -8,14 +8,14 @@ module.exports = async (req, res) => {
     let role = 0
     let id_user = ''
     if(username && password){
-        const exists = await db.query(`SELECT id, token, role FROM user WHERE username='${username}' LIMIT 1`)
+        const exists = await db.query(`SELECT id, hashed_password, role FROM user WHERE username='${username}' LIMIT 1`)
         if(exists.length === 0){
             console.log("ERROR: User do not exist !")
         }else{
             
             const hash = md5(password + 'khalil')
             console.log('hash', hash)
-            if(exists[0].token == hash){
+            if(exists[0].hashed_password == hash){
                 success = 'yes'
                 role = exists[0].role
                 id_user = exists[0].id
