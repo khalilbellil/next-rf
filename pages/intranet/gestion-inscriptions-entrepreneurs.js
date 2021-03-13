@@ -1,12 +1,12 @@
 import React from 'react'
 import 'reactjs-popup/dist/index.css'
-// import ClmAddLead from '../../components/intranet/ClmAddLead'
+import GestionInscriptionsEntrepreneurs from '../../components/intranet/GestionInscriptionsEntrepreneurs'
 
 export default function gestionInscriptionsEntrepreneurs() {
 
     return (
-        <div>
-            {/* <ClmAddLead /> */}
+        <div className="container">
+            <GestionInscriptionsEntrepreneurs />
         </div>
     )
 }
