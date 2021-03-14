@@ -5,7 +5,8 @@ import GestionInscriptionsEntrepreneurs from '../../components/intranet/GestionI
 export default function gestionInscriptionsEntrepreneurs() {
 
     return (
-        <div className="container">
+        <div className="pl-3 pr-3">
+            <br/>
             <GestionInscriptionsEntrepreneurs />
         </div>
     )
