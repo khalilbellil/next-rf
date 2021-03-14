@@ -11,9 +11,12 @@ module.exports = async (req, res) => {
         const insert_user = await db.query(`INSERT INTO user(role, token) VALUES(4, '${token}')`)
 
         if(insert_user.insertId){
+            //create address
+            const insert_address = await db.query(`INSERT INTO address(address) VALUES('')`)
+
             //create contractor
-            const insert_contracor = await db.query(`INSERT INTO contractor(name, email, phone, company_name, id_user)
-            VALUES('${name}', '${email}', '${phone}', '${company_name}', '${insert_user.insertId}')`)
+            const insert_contracor = await db.query(`INSERT INTO contractor(name, email, phone, company_name, id_user, id_address)
+            VALUES('${name}', '${email}', '${phone}', '${company_name}', '${insert_user.insertId}', '${insert_address.insertId}')`)
             if (insert_contracor.insertId) {
                 success = 'yes'
             }

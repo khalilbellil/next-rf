@@ -6,6 +6,7 @@ import ExtranetHeader from './extranet/ExtranetHeader';
 import IntranetHeader from './intranet/IntranetHeader';
 import ExtranetFooter from './extranet/ExtranetFooter';
 import IntranetFooter from './intranet/IntranetFooter';
+import Head from 'next/head';
 
 export default function Layout(props) {
     const router = useRouter()
@@ -22,6 +23,9 @@ export default function Layout(props) {
     }, [router.pathname])
     return (
         <div className="layout" id="App">
+            <Head>
+                <script src="https://kit.fontawesome.com/fe809503a2.js" crossorigin="anonymous"></script>
+            </Head>
             {(layout === '')?<Header/>:(layout === 'extranet')?<ExtranetHeader/>:(layout === 'intranet')?<IntranetHeader/>:""}
             <div className="content" id="page-wrap">
                 {props.children}
