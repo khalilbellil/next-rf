@@ -1,7 +1,7 @@
 const db = require('../../../../lib/db')
 
 module.exports = async (req, res) => {
-    let { uid_contractor, status } = req.body
+    let { id_user, id_contractor, status } = req.body
     
     
 
