@@ -1,5 +1,5 @@
 const db = require('../../../lib/db')
-const t_global = require('../../../../rf_toolbox/global')
+const t_global = require('../../../rf_toolbox/global')
 
 module.exports = async (req, res) => {
     let { code } = req.body
