@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, ButtonGroup, Card, CardHeader, CardBody, FormGroup, Input, Label } from 'reactstrap'
+import { Button, ButtonGroup, Card, CardHeader, CardBody, FormGroup, Input, Label, Table } from 'reactstrap'
 
 export default function GestionInscriptionsEntrepreneurs() {
     const [contractor, setContractor] = useState(undefined)
@@ -8,6 +8,7 @@ export default function GestionInscriptionsEntrepreneurs() {
     const [verifiedColor, setVerifiedColor] = useState('secondary')
     const [refusedColor, setRefusedColor] = useState('secondary')
     const [callbackdateUI, setCallbackdateUI] = useState(true)
+    const [history, setHistory] = useState(undefined)
 
     useEffect(() => {
         getNext()
@@ -36,6 +37,7 @@ export default function GestionInscriptionsEntrepreneurs() {
         .then(res => {
             if(res.success === 'yes'){
                 setContractor(res.contractor)
+                setHistory(res.history)
             }else{
                 alert('Vous avez traiter toutes les fiches disponible actuellement. Merci')
             }
@@ -59,6 +61,7 @@ export default function GestionInscriptionsEntrepreneurs() {
         .then(res => res.json())
         .then(res => {
             if(res.success === 'yes'){
+                getHistory()
                 if(status === 'callbacklater'){
                     setRappelerColor('primary')
                     setPasInteresseColor('secondary')
@@ -115,6 +118,24 @@ export default function GestionInscriptionsEntrepreneurs() {
         })
         .catch(err => console.log("ERROR: ", err))
     }
+    const getHistory = () => {
+        fetch('/api/intranet/get-contractor-history', {
+            method: 'POST',
+            body: JSON.stringify({
+                id_user: localStorage.getItem('id_user'),
+                id_contractor: contractor.id
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            setHistory(res.history)
+        })
+        .catch(err => console.log("ERROR: ", err))
+    }
     return (<>
     <div className="row pl-5 pr-5 mb-3">
         <div className="col">
@@ -143,7 +164,25 @@ export default function GestionInscriptionsEntrepreneurs() {
         <div className="col-3 rf-card">
             <Card>
                 <CardHeader className="text-center" tag="h4">Historique</CardHeader>
-                <CardBody>
+                <CardBody className="p-0">
+                    <Table>
+                        <thead>
+                            <tr>
+                            <th>Date</th>
+                            <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            (history)?history.map(function(item, i){
+                                return <tr>
+                                    <th scope="row">{item.c_date}</th>
+                                    <td>{item.name}</td>
+                                </tr>
+                            }):""
+                        } 
+                        </tbody>
+                    </Table>
                 </CardBody>
             </Card>
         </div>
@@ -185,11 +224,6 @@ export default function GestionInscriptionsEntrepreneurs() {
                             onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
                         </div>
                     </FormGroup>
-                    <FormGroup>
-                        <Label for="departement">Département principal <b style={{color:"#ED5B0F"}}>*</b></Label>
-                        <Input name="departement" value={(contractor)?contractor?.departement:""} disabled={(!contractor)} 
-                        onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
-                    </FormGroup>
                     <FormGroup className="row">
                         <div className='col-4'>
                             <Label for="zip">Code Postal <b style={{color:"#ED5B0F"}}>*</b></Label>
@@ -197,10 +231,28 @@ export default function GestionInscriptionsEntrepreneurs() {
                             onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
                         </div>
                         <div className='col'>
-                            <Label for="address">Adresse</Label>
-                            <Input name="address" type="text" disabled={(!contractor)} value={(contractor)?contractor?.address:""} 
+                            <Label for="id_department">Département <b style={{color:"#ED5B0F"}}>*</b></Label>
+                            <Input name="id_department" value={(contractor)?contractor?.id_department:""} disabled={(!contractor)} 
                             onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
                         </div>
+                    </FormGroup>
+                    <FormGroup className="row">
+                        <div className='col-4'>
+                            <Label for="id_city">Ville <b style={{color:"#ED5B0F"}}>*</b></Label>
+                            <Input name="id_city" type="text" disabled={(!contractor)} value={(contractor)?contractor?.id_city:""} 
+                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                        </div>
+                        <div className='col'>
+                            <Label for="id_region">Région <b style={{color:"#ED5B0F"}}>*</b></Label>
+                            <Input name="id_region" type="text" disabled={(!contractor)} value={(contractor)?contractor?.id_region:""} 
+                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                        </div>
+                        
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="address">Adresse</Label>
+                        <Input name="address" type="text" disabled={(!contractor)} value={(contractor)?contractor?.address:""} 
+                        onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
                     </FormGroup>
                 </CardBody>
             </Card>
