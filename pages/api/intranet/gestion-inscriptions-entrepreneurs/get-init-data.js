@@ -12,7 +12,6 @@ module.exports = async (req, res) => {
     }
     res.status(200).json({
         departments: departments,
-        regions: regions,
-        cities: cities
+        regions: regions
     })
 }

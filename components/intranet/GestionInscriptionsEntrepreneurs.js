@@ -31,8 +31,7 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         .then(res => {
             setInitData({
                 departments: res.departments,
-                regions: res.regions,
-                cities: res.cities
+                regions: res.regions
             })
         })
         .catch(err => console.log("ERROR: ", err))
