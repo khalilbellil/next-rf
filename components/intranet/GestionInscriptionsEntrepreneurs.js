@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, ButtonGroup, Card, CardHeader, CardBody, FormGroup, Input, Label, Table } from 'reactstrap'
 
-export default function GestionInscriptionsEntrepreneurs() {
+export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
     const [contractor, setContractor] = useState(undefined)
     const [rappelerColor, setRappelerColor] = useState('secondary')
     const [pasInteresseColor, setPasInteresseColor] = useState('secondary')
@@ -9,10 +9,34 @@ export default function GestionInscriptionsEntrepreneurs() {
     const [refusedColor, setRefusedColor] = useState('secondary')
     const [callbackdateUI, setCallbackdateUI] = useState(true)
     const [history, setHistory] = useState(undefined)
+    const [initData, setInitData] = useState(undefined)
+    const [cities, setCities] = useState(citiesD)
 
     useEffect(() => {
+        getInitData()
         getNext()
     }, [])
+    const getInitData = () => {
+        fetch('/api/intranet/gestion-inscriptions-entrepreneurs/get-init-data', {
+            method: 'POST',
+            body: JSON.stringify({
+                id_user: localStorage.getItem('id_user')
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            setInitData({
+                departments: res.departments,
+                regions: res.regions,
+                cities: res.cities
+            })
+        })
+        .catch(err => console.log("ERROR: ", err))
+    }
     const resetUI = () => {
         setContractor(undefined)
         setRappelerColor('secondary')
@@ -232,20 +256,38 @@ export default function GestionInscriptionsEntrepreneurs() {
                         </div>
                         <div className='col'>
                             <Label for="id_department">Département <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="id_department" value={(contractor)?contractor?.id_department:""} disabled={(!contractor)} 
-                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                            <Input name="id_department" type='select' value={(contractor)?contractor?.id_department:""} disabled={(!contractor)} 
+                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}>
+                            {
+                                (initData)?initData.departments.map(function(item, i){
+                                    return <option value={item.id}>{item.name}</option>
+                                }):""
+                            } 
+                            </Input>
                         </div>
                     </FormGroup>
                     <FormGroup className="row">
                         <div className='col-4'>
                             <Label for="id_city">Ville <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="id_city" type="text" disabled={(!contractor)} value={(contractor)?contractor?.id_city:""} 
-                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                            <Input name="id_city" type='select' value={(contractor)?contractor?.id_city:""} disabled={(!contractor)} 
+                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}>
+                            {
+                                (cities)?cities.map(function(item, i){
+                                    return <option value={item.id}>{item.name}</option>
+                                }):""
+                            } 
+                            </Input>
                         </div>
                         <div className='col'>
                             <Label for="id_region">Région <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="id_region" type="text" disabled={(!contractor)} value={(contractor)?contractor?.id_region:""} 
-                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                            <Input name="id_region" type='select' value={(contractor)?contractor?.id_region:""} disabled={(!contractor)} 
+                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}>
+                            {
+                                (initData)?initData.regions.map(function(item, i){
+                                    return <option value={item.id}>{item.name}</option>
+                                }):""
+                            } 
+                            </Input>
                         </div>
                         
                     </FormGroup>
