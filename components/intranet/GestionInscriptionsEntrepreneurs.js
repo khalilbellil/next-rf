@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button, ButtonGroup, Card, CardHeader, CardBody, FormGroup, Input, Label, Table } from 'reactstrap'
+import VirtualizedSelect from 'react-virtualized-select';
 
 export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
     const [contractor, setContractor] = useState(undefined)
