@@ -135,14 +135,13 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
     }
     const saveField = (target) => {
         if(target.value){
-            const inputValue = target.value.replace(/\W/g, '');
             fetch('/api/intranet/gestion-inscriptions-entrepreneurs/save-field', {
                 method: 'POST',
                 body: JSON.stringify({
                     id_user: localStorage.getItem('id_user'),
                     id_contractor: contractor.id,
                     one: target.name,
-                    one_val: inputValue
+                    one_val: target.value
                 }),
                 headers: {
                     'Accept': 'application/json',
@@ -237,6 +236,28 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         }
     }
     const getDepartment = (value) => {
+        fetch('/api/global/get-department', {
+            method: 'POST',
+            body: JSON.stringify({
+                code: value
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.department){
+                setActualDepartment(res.department)
+                saveField2('id_department', res.department)
+            }else{
+                alert('error')
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
+    }
+    const getCity = (value) => {
         fetch('/api/global/get-department', {
             method: 'POST',
             body: JSON.stringify({
