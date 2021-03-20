@@ -254,7 +254,7 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         </div>
     </div>
     <div className="row">
-        <div className="col-3 rf-card">
+        <div className="col-4 rf-card">
             <Card>
                 <CardHeader className="text-center" tag="h4">Historique</CardHeader>
                 <CardBody className="p-0">
@@ -279,7 +279,7 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
                 </CardBody>
             </Card>
         </div>
-        <div className="col-9 rf-card">
+        <div className="col-8 rf-card">
             <Card>
                 <CardHeader className="text-center" tag="h4">Fiche entrepreneur</CardHeader>
                 <CardBody>
