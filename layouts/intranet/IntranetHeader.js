@@ -11,7 +11,7 @@ export default function IntranetHeader() {
             setIdUser(localStorage.getItem('id_user'))
         }
         if(!localStorage.getItem('id_user')){
-            router.push('/').then(() => window.scrollTo(0, 0))
+            router.push('/connexion/interne').then(() => window.scrollTo(0, 0))
         }
     }, [])
     const Disconnect = (e) => {

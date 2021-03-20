@@ -1,7 +1,7 @@
 import React from 'react'
 import 'reactjs-popup/dist/index.css'
 import GestionInscriptionsEntrepreneurs from '../../components/intranet/GestionInscriptionsEntrepreneurs'
-import citiesData from '../../src/assets/json/cities.json';
+import citiesData from '../../src/assets/json/cities-select.json';
 
 export default function gestionInscriptionsEntrepreneurs({citiesD}) {
 

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Button, ButtonGroup, Card, CardHeader, CardBody, FormGroup, Input, Label, Table } from 'reactstrap'
 import VirtualizedSelect from 'react-virtualized-select';
+import Select from 'react-select';
+import InfiniteScroll from "react-infinite-scroll-component";
+import AsyncSelect from 'react-select/async';
 
 export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
     const [contractor, setContractor] = useState(undefined)
@@ -12,10 +15,15 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
     const [history, setHistory] = useState(undefined)
     const [initData, setInitData] = useState(undefined)
     const [cities, setCities] = useState(citiesD)
-
+    const [actualCity, setActualCity] = useState({})
+    const defaultCities = [
+        {"value":1,"department_code":"01","insee_code":"01001","zip_code":"01400","label":"L'Abergement-Cl\u00e9menciat","slug":"l abergement clemenciat","gps_lat":46.15678199203189,"gps_lng":4.92469920318725},{"value":2,"department_code":"01","insee_code":"01002","zip_code":"01640","label":"L'Abergement-de-Varey","slug":"l abergement de varey","gps_lat":46.01008562499999,"gps_lng":5.42875916666667},{"value":3,"department_code":"01","insee_code":"01004","zip_code":"01500","label":"Amb\u00e9rieu-en-Bugey","slug":"amberieu en bugey","gps_lat":45.95840939226519,"gps_lng":5.3759920441989},{"value":4,"department_code":"01","insee_code":"01005","zip_code":"01330","label":"Amb\u00e9rieux-en-Dombes","slug":"amberieux en dombes","gps_lat":46.00012039215686,"gps_lng":4.9106016993464},{"value":5,"department_code":"01","insee_code":"01006","zip_code":"01300","label":"Ambl\u00e9on","slug":"ambleon","gps_lat":45.74642690476188,"gps_lng":5.60249178571429},{"value":6,"department_code":"01","insee_code":"01007","zip_code":"01500","label":"Ambronay","slug":"ambronay","gps_lat":46.00144716049382,"gps_lng":5.36654228395062},{"value":7,"department_code":"01","insee_code":"01008","zip_code":"01500","label":"Ambutrix","slug":"ambutrix","gps_lat":45.93598324324325,"gps_lng":5.33183040540541},{"value":8,"department_code":"01","insee_code":"01009","zip_code":"01300","label":"Andert-et-Condon","slug":"andert et condon","gps_lat":45.78647100671141,"gps_lng":5.65744181208053},{"value":9,"department_code":"01","insee_code":"01010","zip_code":"01350","label":"Anglefort","slug":"anglefort","gps_lat":45.91937534246575,"gps_lng":5.78904205479452},{"value":10,"department_code":"01","insee_code":"01011","zip_code":"01100","label":"Apremont","slug":"apremont","gps_lat":46.20755872093024,"gps_lng":5.65991651162791},{"value":11,"department_code":"01","insee_code":"01012","zip_code":"01110","label":"Aranc","slug":"aranc","gps_lat":46.00481852941176,"gps_lng":5.50401754901961},{"value":12,"department_code":"01","insee_code":"01013","zip_code":"01230","label":"Arandas","slug":"arandas","gps_lat":45.891865,"gps_lng":5.49309803030303},{"value":13,"department_code":"01","insee_code":"01014","zip_code":"01100","label":"Arbent","slug":"arbent","gps_lat":46.28619369863014,"gps_lng":5.68751712328767},{"value":14,"department_code":"01","insee_code":"01015","zip_code":"01300","label":"Arboys en Bugey","slug":"arboys en bugey","gps_lat":45.71719158301153,"gps_lng":5.64452416988417},{"value":15,"department_code":"01","insee_code":"01016","zip_code":"01190","label":"Arbigny","slug":"arbigny","gps_lat":46.47556610169492,"gps_lng":4.96954813559322},{"value":16,"department_code":"01","insee_code":"01017","zip_code":"01230","label":"Argis","slug":"argis","gps_lat":45.93517195876287,"gps_lng":5.48169402061856},{"value":17,"department_code":"01","insee_code":"01019","zip_code":"01510","label":"Armix","slug":"armix","gps_lat":45.85662863636362,"gps_lng":5.5744975},{"value":18,"department_code":"01","insee_code":"01021","zip_code":"01480","label":"Ars-sur-Formans","slug":"ars sur formans","gps_lat":45.99437624999999,"gps_lng":4.81913791666667},{"value":19,"department_code":"01","insee_code":"01022","zip_code":"01510","label":"Artemare","slug":"artemare","gps_lat":45.86946857142858,"gps_lng":5.69236197802198},{"value":20,"department_code":"01","insee_code":"01023","zip_code":"01570","label":"Asni\u00e8res-sur-Sa\u00f4ne","slug":"asnieres sur saone","gps_lat":46.38608654545455,"gps_lng":4.88606418181818},{"value":21,"department_code":"01","insee_code":"01024","zip_code":"01340","label":"Attignat","slug":"attignat","gps_lat":46.28585890350878,"gps_lng":5.18164934210526},{"value":22,"department_code":"01","insee_code":"01025","zip_code":"01380","label":"B\u00e2g\u00e9-Dommartin","slug":"bage dommartin","gps_lat":46.32233749999998,"gps_lng":4.957910975},{"value":23,"department_code":"01","insee_code":"01026","zip_code":"01380","label":"B\u00e2g\u00e9-le-Ch\u00e2tel","slug":"bage le chatel","gps_lat":46.30790644444445,"gps_lng":4.92956755555556}
+    ];
     useEffect(() => {
-        getInitData()
-        getNext()
+        if(localStorage.getItem('id_user')){
+            getInitData()
+            getNext()
+        }
     }, [])
     const getInitData = () => {
         fetch('/api/intranet/gestion-inscriptions-entrepreneurs/get-init-data', {
@@ -31,8 +39,12 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         .then(res => res.json())
         .then(res => {
             setInitData({
-                departments: res.departments,
-                regions: res.regions
+                departments: res.departments.map(function(item, i){
+                    return {label:item.name, value:item.id}
+                }),
+                regions: res.regions.map(function(item, i){
+                    return {label:item.name, value:item.id}
+                })
             })
         })
         .catch(err => console.log("ERROR: ", err))
@@ -61,8 +73,12 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         .then(res => {
             if(res.success === 'yes'){
                 setContractor(res.contractor)
+                setActualCity(cities.find(option => option.value === res.contractor.id_city))
                 setHistory(res.history)
             }else{
+                setHistory(undefined)
+                setContractor(undefined)
+                setActualCity({})
                 alert('Vous avez traiter toutes les fiches disponible actuellement. Merci')
             }
         })
@@ -114,33 +130,67 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         .catch(err => console.log("ERROR: ", err))
     }
     const saveField = (target) => {
-        fetch('/api/intranet/gestion-inscriptions-entrepreneurs/save-field', {
-            method: 'POST',
-            body: JSON.stringify({
-                id_user: localStorage.getItem('id_user'),
-                id_contractor: contractor.id,
-                one: target.name,
-                one_val: target.value
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            if(res.success === 'yes'){
-                //saved
-                target.style.border = 'solid 2px green'
-                setInterval(() => {
-                    target.style.border = ''
-                }, 1500);
-            }else{
-                target.style.border = 'solid 2px red'
-                alert('ERREUR lors de la sauvegarde !')
-            }
-        })
-        .catch(err => console.log("ERROR: ", err))
+        if(target.value){
+            const inputValue = target.value.replace(/\W/g, '');
+            fetch('/api/intranet/gestion-inscriptions-entrepreneurs/save-field', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id_user: localStorage.getItem('id_user'),
+                    id_contractor: contractor.id,
+                    one: target.name,
+                    one_val: inputValue
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(res => {
+                if(res.success === 'yes'){
+                    //saved
+                    target.style.border = 'solid 2px green'
+                    setInterval(() => {
+                        target.style.border = ''
+                    }, 1500);
+                }else{
+                    target.style.border = 'solid 2px red'
+                    alert('ERREUR lors de la sauvegarde !')
+                }
+            })
+            .catch(err => console.log("ERROR: ", err))
+        }
+    }
+    const saveField2 = (name, value) => {
+        if(value){
+            fetch('/api/intranet/gestion-inscriptions-entrepreneurs/save-field', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id_user: localStorage.getItem('id_user'),
+                    id_contractor: contractor.id,
+                    one: name,
+                    one_val: value
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(res => {
+                if(res.success === 'yes'){
+                    //saved
+                    // target.style.border = 'solid 2px green'
+                    // setInterval(() => {
+                    //     target.style.border = ''
+                    // }, 1500);
+                }else{
+                    // target.style.border = 'solid 2px red'
+                    alert('ERREUR lors de la sauvegarde !')
+                }
+            })
+            .catch(err => console.log("ERROR: ", err))
+        }
     }
     const getHistory = () => {
         fetch('/api/intranet/get-contractor-history', {
@@ -160,6 +210,23 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         })
         .catch(err => console.log("ERROR: ", err))
     }
+    const filterCities = (inputValue) => {
+        return cities.filter(i =>
+            i.label.toLowerCase().includes(inputValue.toLowerCase())
+        );
+    }
+    const promiseOptions = inputValue =>
+        new Promise(resolve => {
+            setTimeout(() => {
+            resolve(filterCities(inputValue));
+        }, 1000);
+    })
+    const handleCityChange = selectedOption => {
+        setActualCity(selectedOption)
+        console.log('id_city', selectedOption.value)
+        saveField2('id_city', selectedOption.value)
+    }
+    
     return (<>
     <div className="row pl-5 pr-5 mb-3">
         <div className="col">
@@ -256,38 +323,33 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
                         </div>
                         <div className='col'>
                             <Label for="id_department">Département <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="id_department" type='select' value={(contractor)?contractor?.id_department:""} disabled={(!contractor)} 
-                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}>
-                            {
-                                (initData)?initData.departments.map(function(item, i){
-                                    return <option value={item.id}>{item.name}</option>
-                                }):""
-                            } 
-                            </Input>
+                            <Select
+                                name="id_department"
+                                value={(contractor)?initData?.departments?.find(option => option.value === contractor?.id_department):""}
+                                onChange={selectedOption => {setContractor({...contractor, id_department: selectedOption}); saveField2('id_department', selectedOption.value)}}
+                                options={(initData)?initData.departments:""}
+                            />
                         </div>
                     </FormGroup>
                     <FormGroup className="row">
                         <div className='col-4'>
                             <Label for="id_city">Ville <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="id_city" type='select' value={(contractor)?contractor?.id_city:""} disabled={(!contractor)} 
-                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}>
-                            {
-                                (cities)?cities.map(function(item, i){
-                                    return <option value={item.id}>{item.name}</option>
-                                }):""
-                            } 
-                            </Input>
+                            <AsyncSelect
+                                cacheOptions
+                                loadOptions={promiseOptions}
+                                defaultOptions={defaultCities}
+                                value={actualCity}
+                                onChange={handleCityChange}
+                            />
                         </div>
                         <div className='col'>
                             <Label for="id_region">Région <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="id_region" type='select' value={(contractor)?contractor?.id_region:""} disabled={(!contractor)} 
-                            onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}>
-                            {
-                                (initData)?initData.regions.map(function(item, i){
-                                    return <option value={item.id}>{item.name}</option>
-                                }):""
-                            } 
-                            </Input>
+                            <Select
+                                name="id_region"
+                                value={(contractor)?initData?.regions?.find(option => option.value === contractor?.id_region):""}
+                                onChange={selectedOption => {setContractor({...contractor, id_region: selectedOption}); saveField2('id_region', selectedOption.value)}}
+                                options={(initData)?initData.regions:""}
+                            />
                         </div>
                         
                     </FormGroup>
