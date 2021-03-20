@@ -24,7 +24,7 @@ export default function Layout(props) {
     return (
         <div className="layout" id="App">
             <Head>
-                <script src="https://kit.fontawesome.com/fe809503a2.js" crossorigin="anonymous"></script>
+                <script src="https://kit.fontawesome.com/fe809503a2.js" crossOrigin="anonymous"></script>
             </Head>
             {(layout === '')?<Header/>:(layout === 'extranet')?<ExtranetHeader/>:(layout === 'intranet')?<IntranetHeader/>:""}
             <div className="content" id="page-wrap">

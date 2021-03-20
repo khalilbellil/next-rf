@@ -241,12 +241,12 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         <div className="col-8">
             <div className="row pl-5 pr-5">
                 <ButtonGroup className="mr-2">
-                    <Button className="col" color={rappelerColor} onClick={(e) => setCallbackdateUI(true)}>Rappeler plus tard <i class="fas fa-clock"></i></Button>
-                    <Button className="col" color={pasInteresseColor} onClick={(e) => saveStatus('notinterested')}>Pas intéressé <i class="fas fa-comment-slash"></i></Button>
-                    <Button className="col" color={refusedColor} onClick={(e) => saveStatus('refused')}>Refuser <i class="fas fa-times-circle"></i></Button>
-                    <Button className="col " color={verifiedColor} onClick={(e) => saveStatus('verified')}>Valider <i class="fas fa-check-circle"></i></Button>
+                    <Button className="col" color={rappelerColor} onClick={(e) => setCallbackdateUI(true)}>Rappeler plus tard <i className="fas fa-clock"></i></Button>
+                    <Button className="col" color={pasInteresseColor} onClick={(e) => saveStatus('notinterested')}>Pas intéressé <i className="fas fa-comment-slash"></i></Button>
+                    <Button className="col" color={refusedColor} onClick={(e) => saveStatus('refused')}>Refuser <i className="fas fa-times-circle"></i></Button>
+                    <Button className="col " color={verifiedColor} onClick={(e) => saveStatus('verified')}>Valider <i className="fas fa-check-circle"></i></Button>
                 </ButtonGroup>
-                <Button className="col btn-primary-intranet" color="primary" onClick={(e) => getNext()}>Fiche suivante <i class="fas fa-chevron-circle-right"></i></Button>
+                <Button className="col btn-primary-intranet" color="primary" onClick={(e) => getNext()}>Fiche suivante <i className="fas fa-chevron-circle-right"></i></Button>
             </div>
         </div>
         <div className="col">
