@@ -1,5 +1,4 @@
 import React from 'react'
-import 'reactjs-popup/dist/index.css'
 import GestionInscriptionsEntrepreneurs from '../../components/intranet/GestionInscriptionsEntrepreneurs'
 import citiesData from '../../src/assets/json/cities.json';
 import regionsData from '../../src/assets/json/regions.json';
