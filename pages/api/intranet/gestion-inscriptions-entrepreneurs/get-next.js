@@ -9,9 +9,7 @@ module.exports = async (req, res) => {
     let history = undefined
     if(id_user){
         contractor = await db.query(`SELECT c.id, c.id_user, c.id_address, c.id_contractor_status, c.callbacklater, c.email, c.name, c.phone, c.phone2, c.company_name, 
-        c.company_number, c.c_date, a.address, a.code_city, a.zip, a.code_department, a.code_region, 
-        (SELECT name FROM department WHERE id = a.id_department LIMIT 1) as department, (SELECT name FROM city WHERE id = a.id_city LIMIT 1) 
-        as city, (SELECT name FROM region WHERE id = a.id_region LIMIT 1) as region FROM contractor c 
+        c.company_number, c.c_date, a.address, a.code_city, a.zip, a.code_department, a.code_region FROM contractor c 
         JOIN address a ON c.id_address = a.id WHERE c.id_contractor_status = 1 
         AND c.callbacklater IS NULL OR c.callbacklater <= NOW() ORDER BY c.c_date ASC LIMIT 1`)
         if(contractor.length > 0){

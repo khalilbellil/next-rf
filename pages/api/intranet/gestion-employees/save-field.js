@@ -5,13 +5,8 @@ module.exports = async (req, res) => {
     let { id_user, id_employee, one, one_val } = req.body
     let success = 'no'
     
-    if(one !== 'code_city' && one !== 'code_region' && one !== 'code_department' && one !== 'zip' && one !== 'address' && one !== 'email'){
+    if(one !== 'code_city' && one !== 'code_region' && one !== 'code_department' && one !== 'zip' && one !== 'address'){
         await db.query(`UPDATE employee SET ${one} = '${one_val}' WHERE id = '${id_employee}'`)
-        success = 'yes'
-    }else if(one === 'email'){
-        const employee = await db.query(`SELECT id_user FROM employee WHERE id = '${id_employee}' LIMIT 1`)
-        await db.query(`UPDATE employee SET ${one} = '${one_val}' WHERE id = '${id_employee}'`)
-        await db.query(`UPDATE user SET username = '${one_val}' WHERE id = '${employee[0].id_user}'`)
         success = 'yes'
     }else{
         const employee = await db.query(`SELECT id_address FROM employee WHERE id = '${id_employee}' LIMIT 1`)

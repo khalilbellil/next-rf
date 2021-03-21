@@ -7,7 +7,8 @@ module.exports = async (req, res) => {
     let success = 'no'
     let employee = undefined
     if(id_user){
-        employee = await db.query(`SELECT * FROM employee WHERE id='${id_employee}' LIMIT 1`)
+        employee = await db.query(`SELECT e.*, a.address, a.code_city, a.zip, a.code_department, a.code_region FROM employee e LEFT JOIN address a ON a.id = e.id_address 
+        WHERE e.id='${id_employee}' LIMIT 1`)
         if(employee.length > 0){
             employee = employee[0]
             employee = {...employee, c_date: format(new Date(employee.c_date), 'yyyy-MM-dd hh:mm:ss a')}
