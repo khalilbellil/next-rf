@@ -4,8 +4,9 @@ import VirtualizedSelect from 'react-virtualized-select';
 import Select from 'react-select';
 import InfiniteScroll from "react-infinite-scroll-component";
 import AsyncSelect from 'react-select/async';
+import { ContactlessOutlined } from '@material-ui/icons';
 
-export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
+export default function GestionInscriptionsEntrepreneurs({ citiesP, regionsP, departmentsP }) {
     const [contractor, setContractor] = useState(undefined)
     const [rappelerColor, setRappelerColor] = useState('secondary')
     const [pasInteresseColor, setPasInteresseColor] = useState('secondary')
@@ -13,44 +14,27 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
     const [refusedColor, setRefusedColor] = useState('secondary')
     const [callbackdateUI, setCallbackdateUI] = useState(true)
     const [history, setHistory] = useState(undefined)
-    const [initData, setInitData] = useState(undefined)
-    const [cities, setCities] = useState(citiesD)
+    const [cities, setCities] = useState(citiesP.map(function(item, i){
+        return { label: item.nom, value: item.code }
+    }))
+    const [regions, setRegions] = useState(regionsP.map(function(item, i){
+        return { label: item.nom, value: item.code }
+    }))
+    const [departments, setDepartments] = useState(departmentsP.map(function(item, i){
+        return { label: item.nom, value: item.code }
+    }))
     const [actualCity, setActualCity] = useState({})
     const [actualDepartment, setActualDepartment] = useState(undefined)
+    const [actualRegion, setActualRegion] = useState(undefined)
     const defaultCities = [
-        {"value":1,"department_code":"01","insee_code":"01001","zip_code":"01400","label":"L'Abergement-Cl\u00e9menciat","slug":"l abergement clemenciat","gps_lat":46.15678199203189,"gps_lng":4.92469920318725},{"value":2,"department_code":"01","insee_code":"01002","zip_code":"01640","label":"L'Abergement-de-Varey","slug":"l abergement de varey","gps_lat":46.01008562499999,"gps_lng":5.42875916666667},{"value":3,"department_code":"01","insee_code":"01004","zip_code":"01500","label":"Amb\u00e9rieu-en-Bugey","slug":"amberieu en bugey","gps_lat":45.95840939226519,"gps_lng":5.3759920441989},{"value":4,"department_code":"01","insee_code":"01005","zip_code":"01330","label":"Amb\u00e9rieux-en-Dombes","slug":"amberieux en dombes","gps_lat":46.00012039215686,"gps_lng":4.9106016993464},{"value":5,"department_code":"01","insee_code":"01006","zip_code":"01300","label":"Ambl\u00e9on","slug":"ambleon","gps_lat":45.74642690476188,"gps_lng":5.60249178571429},{"value":6,"department_code":"01","insee_code":"01007","zip_code":"01500","label":"Ambronay","slug":"ambronay","gps_lat":46.00144716049382,"gps_lng":5.36654228395062},{"value":7,"department_code":"01","insee_code":"01008","zip_code":"01500","label":"Ambutrix","slug":"ambutrix","gps_lat":45.93598324324325,"gps_lng":5.33183040540541},{"value":8,"department_code":"01","insee_code":"01009","zip_code":"01300","label":"Andert-et-Condon","slug":"andert et condon","gps_lat":45.78647100671141,"gps_lng":5.65744181208053},{"value":9,"department_code":"01","insee_code":"01010","zip_code":"01350","label":"Anglefort","slug":"anglefort","gps_lat":45.91937534246575,"gps_lng":5.78904205479452},{"value":10,"department_code":"01","insee_code":"01011","zip_code":"01100","label":"Apremont","slug":"apremont","gps_lat":46.20755872093024,"gps_lng":5.65991651162791},{"value":11,"department_code":"01","insee_code":"01012","zip_code":"01110","label":"Aranc","slug":"aranc","gps_lat":46.00481852941176,"gps_lng":5.50401754901961},{"value":12,"department_code":"01","insee_code":"01013","zip_code":"01230","label":"Arandas","slug":"arandas","gps_lat":45.891865,"gps_lng":5.49309803030303},{"value":13,"department_code":"01","insee_code":"01014","zip_code":"01100","label":"Arbent","slug":"arbent","gps_lat":46.28619369863014,"gps_lng":5.68751712328767},{"value":14,"department_code":"01","insee_code":"01015","zip_code":"01300","label":"Arboys en Bugey","slug":"arboys en bugey","gps_lat":45.71719158301153,"gps_lng":5.64452416988417},{"value":15,"department_code":"01","insee_code":"01016","zip_code":"01190","label":"Arbigny","slug":"arbigny","gps_lat":46.47556610169492,"gps_lng":4.96954813559322},{"value":16,"department_code":"01","insee_code":"01017","zip_code":"01230","label":"Argis","slug":"argis","gps_lat":45.93517195876287,"gps_lng":5.48169402061856},{"value":17,"department_code":"01","insee_code":"01019","zip_code":"01510","label":"Armix","slug":"armix","gps_lat":45.85662863636362,"gps_lng":5.5744975},{"value":18,"department_code":"01","insee_code":"01021","zip_code":"01480","label":"Ars-sur-Formans","slug":"ars sur formans","gps_lat":45.99437624999999,"gps_lng":4.81913791666667},{"value":19,"department_code":"01","insee_code":"01022","zip_code":"01510","label":"Artemare","slug":"artemare","gps_lat":45.86946857142858,"gps_lng":5.69236197802198},{"value":20,"department_code":"01","insee_code":"01023","zip_code":"01570","label":"Asni\u00e8res-sur-Sa\u00f4ne","slug":"asnieres sur saone","gps_lat":46.38608654545455,"gps_lng":4.88606418181818},{"value":21,"department_code":"01","insee_code":"01024","zip_code":"01340","label":"Attignat","slug":"attignat","gps_lat":46.28585890350878,"gps_lng":5.18164934210526},{"value":22,"department_code":"01","insee_code":"01025","zip_code":"01380","label":"B\u00e2g\u00e9-Dommartin","slug":"bage dommartin","gps_lat":46.32233749999998,"gps_lng":4.957910975},{"value":23,"department_code":"01","insee_code":"01026","zip_code":"01380","label":"B\u00e2g\u00e9-le-Ch\u00e2tel","slug":"bage le chatel","gps_lat":46.30790644444445,"gps_lng":4.92956755555556}
+        {"label":"L'Abergement-Clémenciat","value":"01001","codeDepartement":"01","codeRegion":"84","codesPostaux":["01400"],"population":767},{"label":"L'Abergement-de-Varey","value":"01002","codeDepartement":"01","codeRegion":"84","codesPostaux":["01640"],"population":243},{"label":"Ambérieu-en-Bugey","value":"01004","codeDepartement":"01","codeRegion":"84","codesPostaux":["01500"],"population":14081},{"label":"Ambérieux-en-Dombes","value":"01005","codeDepartement":"01","codeRegion":"84","codesPostaux":["01330"],"population":1671},{"label":"Ambléon","value":"01006","codeDepartement":"01","codeRegion":"84","codesPostaux":["01300"],"population":110},{"label":"Ambronay","value":"01007","codeDepartement":"01","codeRegion":"84","codesPostaux":["01500"],"population":2684},{"label":"Ambutrix","value":"01008","codeDepartement":"01","codeRegion":"84","codesPostaux":["01500"],"population":750},{"label":"Andert-et-Condon","value":"01009","codeDepartement":"01","codeRegion":"84","codesPostaux":["01300"],"population":336},{"label":"Anglefort","value":"01010","codeDepartement":"01","codeRegion":"84","codesPostaux":["01350"],"population":1124},{"label":"Apremont","value":"01011","codeDepartement":"01","codeRegion":"84","codesPostaux":["01100"],"population":383},{"label":"Aranc","value":"01012","codeDepartement":"01","codeRegion":"84","codesPostaux":["01110"],"population":326},{"label":"Arandas","value":"01013","codeDepartement":"01","codeRegion":"84","codesPostaux":["01230"],"population":148},{"label":"Arbent","value":"01014","codeDepartement":"01","codeRegion":"84","codesPostaux":["01100"],"population":3379},{"label":"Arboys en Bugey","value":"01015","codeDepartement":"01","codeRegion":"84","codesPostaux":["01300"],"population":640},{"label":"Arbigny","value":"01016","codeDepartement":"01","codeRegion":"84","codesPostaux":["01190"],"population":462},{"label":"Argis","value":"01017","codeDepartement":"01","codeRegion":"84","codesPostaux":["01230"],"population":438},{"label":"Armix","value":"01019","codeDepartement":"01","codeRegion":"84","codesPostaux":["01510"],"population":26},{"label":"Ars-sur-Formans","value":"01021","codeDepartement":"01","codeRegion":"84","codesPostaux":["01480"],"population":1389},{"label":"Artemare","value":"01022","codeDepartement":"01","codeRegion":"84","codesPostaux":["01510"],"population":1227},{"label":"Asnières-sur-Saône","value":"01023","codeDepartement":"01","codeRegion":"84","codesPostaux":["01570"],"population":63},{"label":"Attignat","value":"01024","codeDepartement":"01","codeRegion":"84","codesPostaux":["01340"],"population":3270},{"label":"Bâgé-Dommartin","value":"01025","codeDepartement":"01","codeRegion":"84","codesPostaux":["01380"],"population":4088},{"label":"Bâgé-le-Châtel","value":"01026","codeDepartement":"01","codeRegion":"84","codesPostaux":["01380"],"population":915},{"label":"Balan","value":"01027","codeDepartement":"01","codeRegion":"84","codesPostaux":["01360"],"population":2856},{"label":"Baneins","value":"01028","codeDepartement":"01","codeRegion":"84","codesPostaux":["01990"],"population":596},{"label":"Beaupont","value":"01029","codeDepartement":"01","codeRegion":"84","codesPostaux":["01270"],"population":685},{"label":"Beauregard","value":"01030","codeDepartement":"01","codeRegion":"84","codesPostaux":["01480"],"population":885},{"label":"Bellignat","value":"01031","codeDepartement":"01","codeRegion":"84","codesPostaux":["01100"],"population":3618},{"label":"Béligneux","value":"01032","codeDepartement":"01","codeRegion":"84","codesPostaux":["01360"],"population":3314},{"label":"Valserhône","value":"01033","codeDepartement":"01","codeRegion":"84","codesPostaux":["01200"],"population":16302},{"label":"Belley","value":"01034","codeDepartement":"01","codeRegion":"84","codesPostaux":["01300"],"population":9133},{"label":"Belleydoux","value":"01035","codeDepartement":"01","codeRegion":"84","codesPostaux":["01130"],"population":317},{"label":"Valromey-sur-Séran","value":"01036","codeDepartement":"01","codeRegion":"84","codesPostaux":["01260"],"population":1299},{"label":"Bénonces","value":"01037","codeDepartement":"01","codeRegion":"84","codesPostaux":["01470"],"population":294},{"label":"Bény","value":"01038","codeDepartement":"01","codeRegion":"84","codesPostaux":["01370"],"population":762},{"label":"Béon","value":"01039","codeDepartement":"01","codeRegion":"84","codesPostaux":["01350"],"population":464},{"label":"Béréziat","value":"01040","codeDepartement":"01","codeRegion":"84","codesPostaux":["01340"],"population":494},{"label":"Bettant","value":"01041","codeDepartement":"01","codeRegion":"84","codesPostaux":["01500"],"population":750}
     ];
 
     useEffect(() => {
         if(localStorage.getItem('id_user')){
-            getInitData()
             getNext()
         }
     }, [])
-    const getInitData = () => {
-        fetch('/api/intranet/gestion-inscriptions-entrepreneurs/get-init-data', {
-            method: 'POST',
-            body: JSON.stringify({
-                id_user: localStorage.getItem('id_user')
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            setInitData({
-                departments: res.departments.map(function(item, i){
-                    return {label:item.name, value:item.id}
-                }),
-                regions: res.regions.map(function(item, i){
-                    return {label:item.name, value:item.id}
-                })
-            })
-        })
-        .catch(err => console.log("ERROR: ", err))
-    }
     const resetUI = () => {
         setContractor(undefined)
         setRappelerColor('secondary')
@@ -75,14 +59,16 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
         .then(res => {
             if(res.success === 'yes'){
                 setContractor(res.contractor)
-                setActualCity(cities.find(option => option.value === res.contractor.id_city))
-                setActualDepartment(res.contractor.id_department)
+                setActualCity(cities.find(option => option.value == res.contractor.code_city))
+                setActualDepartment(res.contractor.code_department)
+                setActualRegion(res.contractor.code_region)
                 setHistory(res.history)
             }else{
                 setHistory(undefined)
                 setContractor(undefined)
                 setActualCity({})
-                setActualDepartment({})
+                setActualDepartment(undefined)
+                setActualRegion(undefined)
                 alert('Vous avez traiter toutes les fiches disponible actuellement. Merci')
             }
         })
@@ -226,55 +212,42 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
     })
     const handleCityChange = selectedOption => {
         setActualCity(selectedOption)
-        saveField2('id_city', selectedOption.value)
+        saveField2('code_city', selectedOption.value)
     }
     const onChangeZip = value => {
         setContractor({...contractor, zip: value})
-        if(value.length === 2){
-            const dep = value.toString()[0] + value.toString()[1]
-            getDepartment(dep)
+        if(value.length === 5){
+            getCity(value)
         }
     }
-    const getDepartment = (value) => {
-        fetch('/api/global/get-department', {
-            method: 'POST',
-            body: JSON.stringify({
-                code: value
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            if(res.department){
-                setActualDepartment(res.department)
-                saveField2('id_department', res.department)
-            }else{
-                alert('error')
-            }
-        })
-        .catch(err => console.log("ERROR: ", err))
-    }
     const getCity = (value) => {
-        fetch('/api/global/get-department', {
-            method: 'POST',
-            body: JSON.stringify({
-                code: value
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
+        fetch(`https://geo.api.gouv.fr/communes?codePostal=${value}`)
         .then(res => res.json())
         .then(res => {
-            if(res.department){
-                setActualDepartment(res.department)
-                saveField2('id_department', res.department)
+            if(res.length === 1){
+                setActualDepartment(res[0].codeDepartement)
+                setActualRegion(res[0].codeRegion)
+                setActualCity(cities.find(option => option.label == (res[0].nom)))
+                saveField2('code_department', res[0].codeDepartement)
+                saveField2('code_region', res[0].codeRegion)
+                saveField2('code_city', cities.find(option => option.label == (res[0].nom)).value)
+            }else if(res.length > 1){
+                const newRes = res.sort(function(a, b) {    
+                    if (a["population"] < b["population"]) {    
+                        return 1;    
+                    } else if (a["population"] > b["population"]) {    
+                        return -1;    
+                    }    
+                    return 0;    
+                })//order by population desc
+                setActualDepartment(newRes[0].codeDepartement)
+                setActualRegion(newRes[0].codeRegion)
+                setActualCity(cities.find(option => option.label == (newRes[0].nom)))
+                saveField2('code_department', newRes[0].codeDepartement)
+                saveField2('code_region', newRes[0].codeRegion)
+                saveField2('code_city', cities.find(option => option.label == (newRes[0].nom)).value)
             }else{
-                alert('error')
+                alert('Code postal inconnu')
             }
         })
         .catch(err => console.log("ERROR: ", err))
@@ -374,18 +347,18 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
                             onChange={(e) => {onChangeZip(e.target.value)}} onBlur={(e) => saveField(e.target)}/>
                         </div>
                         <div className='col'>
-                            <Label for="id_department">Département <b style={{color:"#ED5B0F"}}>*</b></Label>
+                            <Label for="code_department">Département <b style={{color:"#ED5B0F"}}>*</b></Label>
                             <Select
-                                name="id_department"
-                                value={(actualDepartment)?initData?.departments?.find(option => option.value === actualDepartment):""}
-                                onChange={selectedOption => {setContractor({...contractor, id_department: selectedOption}); saveField2('id_department', selectedOption.value)}}
-                                options={(initData)?initData.departments:""}
+                                name="code_department"
+                                value={(actualDepartment)?departments.find(option => option.value == actualDepartment):""}
+                                onChange={selectedOption => {setActualDepartment(selectedOption.value); saveField2('code_department', selectedOption.value)}}
+                                options={(departments)?departments:""}
                             />
                         </div>
                     </FormGroup>
                     <FormGroup className="row">
                         <div className='col-4'>
-                            <Label for="id_city">Ville <b style={{color:"#ED5B0F"}}>*</b></Label>
+                            <Label for="code_city">Ville <b style={{color:"#ED5B0F"}}>*</b></Label>
                             <AsyncSelect
                                 cacheOptions
                                 loadOptions={promiseOptions}
@@ -395,12 +368,12 @@ export default function GestionInscriptionsEntrepreneurs({ citiesD }) {
                             />
                         </div>
                         <div className='col'>
-                            <Label for="id_region">Région <b style={{color:"#ED5B0F"}}>*</b></Label>
+                            <Label for="code_region">Région <b style={{color:"#ED5B0F"}}>*</b></Label>
                             <Select
-                                name="id_region"
-                                value={(contractor)?initData?.regions?.find(option => option.value === contractor?.id_region):""}
-                                onChange={selectedOption => {setContractor({...contractor, id_region: selectedOption}); saveField2('id_region', selectedOption.value)}}
-                                options={(initData)?initData.regions:""}
+                                name="code_region"
+                                value={(actualRegion)?regions.find(option => option.value == actualRegion):""}
+                                onChange={selectedOption => {setActualRegion(selectedOption.value); saveField2('code_region', selectedOption.value)}}
+                                options={(regions)?regions:""}
                             />
                         </div>
                         

@@ -6,8 +6,8 @@ module.exports = async (req, res) => {
     let regions = undefined
     let cities = undefined
     if(id_user){
-        departments = await db.query(`SELECT id, name FROM department ORDER BY name ASC`)
-        regions = await db.query(`SELECT id, name FROM region ORDER BY name ASC`)
+        departments = await db.query(`SELECT id, name, code FROM department ORDER BY name ASC`)
+        regions = await db.query(`SELECT id, name, code FROM region ORDER BY name ASC`)
     }
     res.status(200).json({
         departments: departments,

@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
     let { id_user, id_contractor, one, one_val } = req.body
     let success = 'no'
     
-    if(one !== 'id_city' && one !== 'id_region' && one !== 'id_department' && one !== 'zip' && one !== 'address'){
+    if(one !== 'code_city' && one !== 'code_region' && one !== 'code_department' && one !== 'zip' && one !== 'address'){
         await db.query(`UPDATE contractor SET ${one} = '${one_val}' WHERE id = '${id_contractor}'`)
         success = 'yes'
     }else{
