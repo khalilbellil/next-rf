@@ -3,7 +3,6 @@ var md5 = require("md5")
 
 module.exports = async (req, res) => {
     let { username, password } = req.body
-    console.log('body', req.body)
     let success = 'no'
     let role = 0
     let id_user = ''
@@ -14,7 +13,6 @@ module.exports = async (req, res) => {
         }else{
             
             const hash = md5(password + 'khalil')
-            console.log('hash', hash)
             if(exists[0].hashed_password == hash){
                 success = 'yes'
                 role = exists[0].role

@@ -27,7 +27,9 @@ export default function gestionInscriptionsEntrepreneurs({citiesD, regionsD, dep
     const [modeAdd, setModeAdd] = useState(false)
 
     useEffect(() => {
-        getEmployees()
+        if(localStorage.getItem('id_user')){
+            getEmployees()
+        }
     }, [])
 
     const resetUI = () => {
