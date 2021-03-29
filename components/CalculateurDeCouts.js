@@ -3,9 +3,9 @@ import { Line } from "react-chartjs-2"
 import { useRouter } from 'next/router'
 import { Button, FormGroup, Input, Label } from 'reactstrap'
 
-export default function CalculateurDeCouts() {
+export default function CalculateurDeCouts(props) {
     const [dataLine, setDataLine] = useState({
-        labels: ["Prix minimum", "Prix moyen", "Prix maximum"],
+        labels: ["Prix minimum ($C)", "Prix moyen ($C)", "Prix maximum ($C)"],
         datasets: [
         {
             label: "Inclus matériaux et main d'oeuvre",
@@ -26,7 +26,7 @@ export default function CalculateurDeCouts() {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [4500, 7500, 9000]
+            data: props.data
         }
         ]
     })
