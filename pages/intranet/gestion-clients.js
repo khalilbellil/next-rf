@@ -8,12 +8,12 @@ import departmentsData from '../../src/assets/json/departments.json';
 
 export default function gestionClients({citiesD, regionsD, departmentsD}) {
     const [client, setClient] = useState(undefined)
-    const [rappelerColor, setRappelerColor] = useState('secondary')
+    const [projects, setProjects] = useState(undefined)
+    const [history, setHistory] = useState(undefined)
     const [pasInteresseColor, setPasInteresseColor] = useState('secondary')
     const [verifiedColor, setVerifiedColor] = useState('secondary')
     const [refusedColor, setRefusedColor] = useState('secondary')
-    const [callbackdateUI, setCallbackdateUI] = useState(true)
-    const [history, setHistory] = useState(undefined)
+    const [delays, setDelays] = useState(undefined)
     const [cities, setCities] = useState(citiesD.map(function(item, i){
         return { label: item.nom, value: item.code }
     }))
@@ -32,20 +32,41 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
 
     useEffect(() => {
         if(localStorage.getItem('id_user')){
-            //getNext()
+            getInitData()
+            getNext()
         }
     }, [])
     const resetUI = () => {
         setClient(undefined)
-        setRappelerColor('secondary')
         setPasInteresseColor('secondary')
         setVerifiedColor('secondary')
         setRefusedColor('secondary')
-        setCallbackdateUI(false)
+    }
+    const getInitData = () => {
+        fetch('/api/intranet/gestion-clients/get-init-data', {
+            method: 'POST',
+            body: JSON.stringify({
+                id_user: localStorage.getItem('id_user')
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success === 'yes'){
+                console.log(res.delays)
+                setDelays(res.delays)
+            }else{
+                alert('Error')
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
     }
     const getNext = () => {
         resetUI()
-        fetch('/api/intranet/gestion-inscriptions-entrepreneurs/get-next', {
+        fetch('/api/intranet/gestion-clients/get-next', {
             method: 'POST',
             body: JSON.stringify({
                 id_user: localStorage.getItem('id_user')
@@ -63,6 +84,19 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                 setActualDepartment(res.client.code_department)
                 setActualRegion(res.client.code_region)
                 setHistory(res.history)
+                res.projects.forEach(p => {
+                    p.callbackui = false
+                    if(p.callbacklater){
+                        p.callbacklater_time = p.callbacklater[11] + p.callbacklater[12] + p.callbacklater[13] + p.callbacklater[14] + p.callbacklater[15]
+                        p.callbacklater_date = p.callbacklater[0] + p.callbacklater[1] + p.callbacklater[2] + p.callbacklater[3] + p.callbacklater[4] + p.callbacklater[5] + p.callbacklater[6] + p.callbacklater[7] + p.callbacklater[8] + p.callbacklater[9]
+                        p.callbackcolor = 'primary'
+                    }else{
+                        p.callbacklater_date = ''
+                        p.callbacklater_time = ''
+                        p.callbackcolor = 'secondary'
+                    }
+                })
+                setProjects(res.projects)
             }else{
                 setHistory(undefined)
                 setClient(undefined)
@@ -73,113 +107,6 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
             }
         })
         .catch(err => console.log("ERROR: ", err))
-    }
-    const saveStatus = (status, callbackdate = '') => {
-        fetch('/api/intranet/gestion-inscriptions-entrepreneurs/save-status', {
-            method: 'POST',
-            body: JSON.stringify({
-                id_user: localStorage.getItem('id_user'),
-                id_client: client.id,
-                status: status,
-                callbacklater: callbackdate
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            if(res.success === 'yes'){
-                getHistory()
-                if(status === 'callbacklater'){
-                    setRappelerColor('primary')
-                    setPasInteresseColor('secondary')
-                    setVerifiedColor('secondary')
-                    setRefusedColor('secondary')
-                }else if(status === 'notinterested'){
-                    setPasInteresseColor('primary')
-                    setRappelerColor('secondary')
-                    setVerifiedColor('secondary')
-                    setRefusedColor('secondary')
-                }else if(status === 'verified'){
-                    setVerifiedColor('primary')
-                    setPasInteresseColor('secondary')
-                    setRappelerColor('secondary')
-                    setRefusedColor('secondary')
-                }else if(status === 'refused'){
-                    setRefusedColor('primary')
-                    setVerifiedColor('secondary')
-                    setPasInteresseColor('secondary')
-                    setRappelerColor('secondary')
-                }
-            }else{
-                alert('Erreur !')
-            }
-        })
-        .catch(err => console.log("ERROR: ", err))
-    }
-    const saveField = (target) => {
-        if(target.value){
-            fetch('/api/intranet/gestion-inscriptions-entrepreneurs/save-field', {
-                method: 'POST',
-                body: JSON.stringify({
-                    id_user: localStorage.getItem('id_user'),
-                    id_client: client.id,
-                    one: target.name,
-                    one_val: target.value
-                }),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then(res => {
-                if(res.success === 'yes'){
-                    //saved
-                    target.style.border = 'solid 2px green'
-                    setInterval(() => {
-                        target.style.border = ''
-                    }, 1500);
-                }else{
-                    target.style.border = 'solid 2px red'
-                    alert('ERREUR lors de la sauvegarde !')
-                }
-            })
-            .catch(err => console.log("ERROR: ", err))
-        }
-    }
-    const saveField2 = (name, value) => {
-        if(value){
-            fetch('/api/intranet/gestion-inscriptions-entrepreneurs/save-field', {
-                method: 'POST',
-                body: JSON.stringify({
-                    id_user: localStorage.getItem('id_user'),
-                    id_client: client.id,
-                    one: name,
-                    one_val: value
-                }),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then(res => {
-                if(res.success === 'yes'){
-                    //saved
-                    // target.style.border = 'solid 2px green'
-                    // setInterval(() => {
-                    //     target.style.border = ''
-                    // }, 1500);
-                }else{
-                    // target.style.border = 'solid 2px red'
-                    alert('ERREUR lors de la sauvegarde !')
-                }
-            })
-            .catch(err => console.log("ERROR: ", err))
-        }
     }
     const getHistory = () => {
         fetch('/api/intranet/get-client-history', {
@@ -212,7 +139,7 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
     })
     const handleCityChange = selectedOption => {
         setActualCity(selectedOption)
-        saveField2('code_city', selectedOption.value)
+        //saveField2('code_city', selectedOption.value)
     }
     const onChangeZip = value => {
         setClient({...client, zip: value})
@@ -228,9 +155,9 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                 setActualDepartment(res[0].codeDepartement)
                 setActualRegion(res[0].codeRegion)
                 setActualCity(cities.find(option => option.label == (res[0].nom)))
-                saveField2('code_department', res[0].codeDepartement)
-                saveField2('code_region', res[0].codeRegion)
-                saveField2('code_city', cities.find(option => option.label == (res[0].nom)).value)
+                //saveField2('code_department', res[0].codeDepartement)
+                //saveField2('code_region', res[0].codeRegion)
+                //saveField2('code_city', cities.find(option => option.label == (res[0].nom)).value)
             }else if(res.length > 1){
                 const newRes = res.sort(function(a, b) {    
                     if (a["population"] < b["population"]) {    
@@ -243,40 +170,84 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                 setActualDepartment(newRes[0].codeDepartement)
                 setActualRegion(newRes[0].codeRegion)
                 setActualCity(cities.find(option => option.label == (newRes[0].nom)))
-                saveField2('code_department', newRes[0].codeDepartement)
-                saveField2('code_region', newRes[0].codeRegion)
-                saveField2('code_city', cities.find(option => option.label == (newRes[0].nom)).value)
+                //saveField2('code_department', newRes[0].codeDepartement)
+                //saveField2('code_region', newRes[0].codeRegion)
+                //saveField2('code_city', cities.find(option => option.label == (newRes[0].nom)).value)
             }else{
                 alert('Code postal inconnu')
             }
         })
         .catch(err => console.log("ERROR: ", err))
     }
-    return (<>
-    <div className="row pl-5 pr-5 mb-3">
-        <div className="col">
-            {
-                (callbackdateUI)?(<div className="row">
-                    <Input className="col" type='date' onChange={(e) => {saveStatus('callbacklater', e.target.value)}} />
-                </div>):''
+    const handleCallBackLater = (index) => {
+        if(projects[index].callbacklater_date && projects[index].callbacklater_time){
+            fetch('/api/intranet/gestion-clients/save-field', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id_user: localStorage.getItem('id_user'),
+                    id_client: client.id,
+                    id_project: (index !== undefined)?projects[index].id:'',
+                    one: 'callbacklater',
+                    one_val: projects[index].callbacklater_date + ' ' + projects[index].callbacklater_time + ':00'
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(res => {
+                if(res.success === 'yes'){
+                    let newArr = [...projects]
+                    newArr[index]['callbackcolor'] = 'primary'
+                    setProjects(newArr)
+                }else{
+                    let newArr = [...projects]
+                    newArr[index]['callbackcolor'] = 'danger'
+                    setProjects(newArr)
+                    alert('ERREUR lors de la sauvegarde !')
+                }
+            })
+            .catch(err => console.log("ERROR: ", err))
+        }
+    }
+    const onChangeInputProject = (target, index) => {
+        let newArr = [...projects]
+        newArr[index][target.name] = target.value
+        setProjects(newArr)
+    }
+    const onBlurInputProject = (target, index) => {
+        fetch('/api/intranet/gestion-clients/save-field', {
+            method: 'POST',
+            body: JSON.stringify({
+                id_user: localStorage.getItem('id_user'),
+                id_client: client.id,
+                id_project: (index !== undefined)?projects[index].id:'',
+                one: target.name,
+                one_val: target.value
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
-        </div>
-        <div className="col-8">
-            <div className="row pl-5 pr-5">
-                <ButtonGroup className="mr-2">
-                    <Button className="col" color={rappelerColor} onClick={(e) => setCallbackdateUI(true)}>Rappeler plus tard <i className="fas fa-clock"></i></Button>
-                    <Button className="col" color={pasInteresseColor} onClick={(e) => saveStatus('canceled')}>Annuler <i className="fas fa-times-circle"></i></Button>
-                    <Button className="col" color={refusedColor} onClick={(e) => saveStatus('refused')}>Courriel <i class="far fa-envelope"></i></Button>
-                    <Button className="col " color={verifiedColor} onClick={(e) => saveStatus('activated')}>Activer <i className="fas fa-check-circle"></i></Button>
-                </ButtonGroup>
-                <Button className="col btn-primary-intranet" color="primary" onClick={(e) => getNext()}>Fiche suivante <i className="fas fa-chevron-circle-right"></i></Button>
-            </div>
-        </div>
-        <div className="col">
-
-        </div>
-    </div>
-    <div className="row pl-5 pr-5 mb-3">
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success === 'yes'){
+                target.style.border = 'solid 2px green'
+                setInterval(() => {
+                    target.style.border = ''
+                }, 1500);
+            }else{
+                target.style.border = 'solid 2px red'
+                alert('ERREUR lors de la sauvegarde !')
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
+    }
+    
+    return (<div className="col">
+    <div className="row pl-5 pr-5 pb-3">
         <div className="col-4 rf-card">
             <Card>
                 <CardHeader className="text-center" tag="h4">Historique</CardHeader>
@@ -304,132 +275,179 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
         </div>
         <div className="col-8 rf-card">
             <Card>
-                <CardHeader className="text-center" tag="h4">Fiche client #{}</CardHeader>
+                <CardHeader className="text-center" tag="h4">Fiche client <b style={{color:"#ED5B0F"}}>#{(client)?client.id:''}</b></CardHeader>
                 <CardBody>
                     <FormGroup>
                         <Label for="name">Nom <b style={{color:"#ED5B0F"}}>*</b></Label>
-                        <Input name="name" disabled={(!client)} value={(client)?client?.name:""} 
-                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                        <Input name="name" disabled={(!client)} value={(client)?client?.name:""} style={{border:''}}
+                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => onBlurInputProject(e.target, undefined)}/>
                     </FormGroup>
                     <FormGroup>
                         <Label for="email">Courriel <b style={{color:"#ED5B0F"}}>*</b></Label>
                         <Input name="email" disabled={(!client)} value={(client)?client?.email:""} 
-                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => onBlurInputProject(e.target, undefined)}/>
                     </FormGroup>
                     <FormGroup className="row">
                         <div className='col'>
                             <Label for="phone">Téléphone <b style={{color:"#ED5B0F"}}>*</b></Label>
                             <Input name="phone" type="text" disabled={(!client)} value={(client)?client?.phone:""} 
-                            onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                            onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => onBlurInputProject(e.target, undefined)}/>
                         </div>
                         <div className='col'>
                             <Label for="phone2">Téléphone 2</Label>
                             <Input name="phone2" type="text" disabled={(!client)} value={(client)?client?.phone2:""} 
-                            onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                            onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => onBlurInputProject(e.target, undefined)}/>
                         </div>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="address">Adresse principale</Label>
-                        <Input name="address" type="text" disabled={(!client)} value={(client)?client?.address:""} 
-                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                        <Label for="address_client">Adresse principale</Label>
+                        <Input name="address_client" type="text" disabled={(!client)} value={(client)?client?.address:""} 
+                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => onBlurInputProject(e.target, undefined)}/>
                     </FormGroup>
+                    <div className="row pl-3 pr-3">
+                        <Button className="col btn-primary-intranet" color="primary" onClick={(e) => getNext()}>Fiche suivante <i className="fas fa-chevron-circle-right"></i></Button>
+                    </div>
                 </CardBody>
             </Card>
         </div>
     </div>
-    <div className="row pl-5 pr-5 mb-3">
-        <div className="col rf-card">
-            <Card>
-                <CardHeader className="text-center" tag="h4">Fiche projet #{}</CardHeader>
-                <CardBody>
-                    <FormGroup>
-                        <Label for="name">Description <b style={{color:"#ED5B0F"}}>*</b></Label>
-                        <Input type="textarea" name="name" disabled={(!client)} value={(client)?client?.name:""} 
-                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="email">Service <b style={{color:"#ED5B0F"}}>*</b></Label>
-                        <Input name="email" disabled={(!client)} value={(client)?client?.email:""} 
-                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
-                    </FormGroup>
-                    <FormGroup className="row">
-                        <div className='col'>
-                            <Label for="phone">Téléphone <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="phone" type="text" disabled={(!client)} value={(client)?client?.phone:""} 
-                            onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
-                        </div>
-                        <div className='col'>
-                            <Label for="phone2">Téléphone 2</Label>
-                            <Input name="phone2" type="text" disabled={(!client)} value={(client)?client?.phone2:""} 
-                            onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
-                        </div>
-                    </FormGroup>
-                    <FormGroup className="row">
-                        <div className='col'>
-                            <Label for="company_name">Nom de l'entreprise <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="company_name" type="text" disabled={(!client)} value={(client)?client?.company_name:""} 
-                            onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
-                        </div>
-                        <div className='col-5'>
-                            <Label for="company_number">Numero d'entreprise</Label>
-                            <Input name="company_number" disabled={(!client)} value={(client)?client?.company_number:""} 
-                            onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
-                        </div>
-                    </FormGroup>
-                    <FormGroup className="row">
-                        <div className='col-4'>
-                            <Label for="zip">Code Postal <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Input name="zip" type="text" disabled={(!client)} value={(client)?client?.zip:""} 
-                            onChange={(e) => {onChangeZip(e.target.value)}} onBlur={(e) => saveField(e.target)}/>
-                        </div>
-                        <div className='col'>
-                            <Label for="code_department">Département <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Select
-                                name="code_department"
-                                value={(actualDepartment)?departments.find(option => option.value == actualDepartment):""}
-                                onChange={selectedOption => {setActualDepartment(selectedOption.value); saveField2('code_department', selectedOption.value)}}
-                                options={(departments)?departments:""}
-                            />
-                        </div>
-                    </FormGroup>
-                    <FormGroup className="row">
-                        <div className='col-4'>
-                            <Label for="code_city">Ville <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <AsyncSelect
-                                cacheOptions
-                                loadOptions={promiseOptions}
-                                defaultOptions={defaultCities}
-                                value={actualCity}
-                                onChange={handleCityChange}
-                            />
-                        </div>
-                        <div className='col'>
-                            <Label for="code_region">Région <b style={{color:"#ED5B0F"}}>*</b></Label>
-                            <Select
-                                name="code_region"
-                                value={(actualRegion)?regions.find(option => option.value == actualRegion):""}
-                                onChange={selectedOption => {setActualRegion(selectedOption.value); saveField2('code_region', selectedOption.value)}}
-                                options={(regions)?regions:""}
-                            />
-                        </div>
-                        
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="address">Adresse</Label>
-                        <Input name="address" type="text" disabled={(!client)} value={(client)?client?.address:""} 
-                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
-                    </FormGroup>
-                </CardBody>
-            </Card>
-        </div>
-    </div>
-    </>)
+    {
+        (projects)?projects.map(function(item, i){
+            return (
+                <div className="row pl-5 pr-5 pb-3">
+                    <div className="col rf-card">
+                        <Card>
+                            <CardHeader className="text-center" tag="h4">
+                                <div className="row">
+                                    <div className="col-3" style={{fontSize:"16px"}}>Status: <b style={{color:"#ED5B0F"}}>{item.project_status}</b></div>
+                                    <div className="col-6">Fiche projet <b style={{color:"#ED5B0F"}}>#{item.id}</b></div>
+                                    <div className="col-3" style={{fontSize:"16px"}}>Date de la demande: <b style={{color:"#ED5B0F"}}>{item.c_date}</b></div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-2">
+                                        {
+                                            (item.callbackui)?(<div className="row">
+                                                <Input className="col" type='date' name="callbacklater_date" onChange={(e) => onChangeInputProject(e.target, i)} value={item.callbacklater_date}/>
+                                                <Input className="col" type='time' name="callbacklater_time" onChange={(e) => onChangeInputProject(e.target, i)} value={item.callbacklater_time}/>
+                                                <Button onClick={e => handleCallBackLater(i)}>Valider</Button>
+                                            </div>):''
+                                        }
+                                    </div>
+                                    <div className="col">
+                                        <Button className="" color={item.callbackcolor} onClick={(e) => {
+                                            let newArr = [...projects]
+                                            if(!newArr[i]["callbackui"]){
+                                                newArr[i]["callbackui"] = true
+                                            }else{
+                                                newArr[i]["callbackui"] = false
+                                            }
+                                            setProjects(newArr)
+                                        }}>Rappeler plus tard <i className="fas fa-clock"></i></Button>
+                                        <Button className="" color={refusedColor} onClick={(e) => saveStatus('refused')}>Courriel <i className="far fa-envelope"></i></Button>
+                                        <Button className="" color={pasInteresseColor} onClick={(e) => saveStatus('canceled')}>Annuler <i className="fas fa-times-circle"></i></Button>
+                                        <Button className=" " color={verifiedColor} onClick={(e) => saveStatus('activated')}>Activer <i className="fas fa-check-circle"></i></Button>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardBody>
+                                <FormGroup>
+                                    <Label for="description">Description <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                    <Input type="textarea" name="description" value={item.description} 
+                                    onChange={(e) => onChangeInputProject(e.target, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
+                                </FormGroup>
+                                <FormGroup className="row">
+                                    <div className='col'>
+                                        <Label for="id_service">Service <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                        <Input name="id_service" type="select" value={item.id_service} 
+                                        onChange={(e) => onChangeInputProject(e.target, i)}>
+                                            <option>Choisir</option>
+                                        </Input>
+                                    </div>
+                                    <div className='col'>
+                                        <Label for="id_subservice">Sous service <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                        <Input name="id_subservice" type="select" value={item.id_subservice} 
+                                        onChange={(e) => onChangeInputProject(e.target, i)}>
+                                            <option>Choisir</option>
+                                        </Input>
+                                    </div>
+                                </FormGroup>
+                                <FormGroup className="row">
+                                    <div className='col'>
+                                        <Label for="budget">Budget</Label>
+                                        <Input name="budget" type="text" value={item.budget} 
+                                        onChange={(e) => onChangeInputProject(e.target, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
+                                    </div>
+                                    <div className='col-5'>
+                                        <Label for="id_project_delay">Délais avant début des travaux <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                        <Input name="id_project_delay" type="select" value={item.id_project_delay} 
+                                        onChange={(e) => onChangeInputProject(e.target, i)}>
+                                            <option>Choisir</option>
+                                            {
+                                                (delays)?delays.map(function(item, i){
+                                                    return <option value={item.id}>{item.name}</option>
+                                                }):""
+                                            }
+                                        </Input>
+                                    </div>
+                                </FormGroup>
+                                <FormGroup className="row">
+                                    <div className='col-4'>
+                                        <Label for="zip">Code Postal <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                        <Input name="zip" type="text" value={item.zip} 
+                                        onChange={(e) => onChangeInputProject(e.target, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
+                                    </div>
+                                    <div className='col'>
+                                        <Label for="code_department">Département <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                        <Select
+                                            name="code_department"
+                                            value={(actualDepartment)?departments.find(option => option.value == actualDepartment):""}
+                                            onChange={(e) => onChangeInputProject(e.target, i)}
+                                            options={(departments)?departments:""}
+                                        />
+                                    </div>
+                                </FormGroup>
+                                <FormGroup className="row">
+                                    <div className='col-4'>
+                                        <Label for="code_city">Ville <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                        <AsyncSelect
+                                            cacheOptions
+                                            loadOptions={promiseOptions}
+                                            defaultOptions={defaultCities}
+                                            value={actualCity}
+                                            onChange={(e) => onChangeInputProject(e.target, i)}
+                                        />
+                                    </div>
+                                    <div className='col'>
+                                        <Label for="code_region">Région <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                        <Select
+                                            name="code_region"
+                                            value={(actualRegion)?regions.find(option => option.value == actualRegion):""}
+                                            onChange={(e) => onChangeInputProject(e.target, i)} 
+                                            options={(regions)?regions:""}
+                                        />
+                                    </div>
+                                    
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="address">Adresse <b style={{color:"#ED5B0F"}}>*</b></Label>
+                                    <Input name="address" type="text" value={item.address} 
+                                    onChange={(e) => onChangeInputProject(e.target, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
+                                </FormGroup>
+                            </CardBody>
+                        </Card>
+                    </div>
+                </div>
+            )
+        }):""
+    }
+    </div>)
 }
 
 export async function getStaticProps() {
     const citiesD = citiesData
     const regionsD = regionsData
     const departmentsD = departmentsData
+    
 
     return {
         props: {
