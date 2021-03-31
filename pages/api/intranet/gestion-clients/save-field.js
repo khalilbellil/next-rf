@@ -17,6 +17,7 @@ module.exports = async (req, res) => {
                     success = 'yes'
                 }
             }else if(id_project && one === 'description' || one === 'id_service' || one === 'id_subservice' || one === 'budget' || one === 'id_project_delay' || one === 'callbacklater'){
+                console.log(one_val)
                 const ress = await db.query(`UPDATE project SET ${one} = '${one_val}' WHERE id = '${id_project}'`)
                 if(ress.affectedRows > 0){
                     success = 'yes'

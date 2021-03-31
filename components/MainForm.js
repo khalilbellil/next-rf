@@ -13,8 +13,9 @@ export default function MainForm() {
                 name: e.target[0].value,
                 email: e.target[1].value,
                 phone: e.target[2].value,
-                address: e.target[3].value,
-                description: e.target[4].value,
+                zip: e.target[3].value,
+                address: e.target[4].value,
+                description: e.target[5].value
             }),
             headers: {
                 'Accept': 'application/json',
@@ -35,27 +36,38 @@ export default function MainForm() {
         <Form onSubmit={handleSubmit} method="POST" className="p-3" style={{border:'2px solid black', borderRadius:'10px'}}>
             <FormGroup>
                 <Label for="name">Votre nom <b style={{color:"#ED5B0F"}}>*</b></Label>
-                <Input name="name" required/>
+                <Input name="name" required 
+                onInvalid={(e) => e.currentTarget.setCustomValidity('Champ requis')} onInput={(e) => e.currentTarget.setCustomValidity('')}/>
             </FormGroup>
             <FormGroup>
                 <Label for="email">Votre courriel <b style={{color:"#ED5B0F"}}>*</b></Label>
-                <Input name="email" type="email" required/>
+                <Input name="email" type="email" required 
+                onInvalid={(e) => e.currentTarget.setCustomValidity('Champ requis ou courriel non valide')} onInput={(e) => e.currentTarget.setCustomValidity('')}/>
                 <FormFeedback>Ceci n'est pas un courriel valide !</FormFeedback>
                 <FormText>jean@exemple.fr</FormText>
             </FormGroup>
             <FormGroup>
                 <Label for="phone">Votre numéro de téléphone <b style={{color:"#ED5B0F"}}>*</b></Label>
-                <Input name="phone" type="phone" required/>
+                <Input name="phone" type="number" required 
+                onInvalid={(e) => e.currentTarget.setCustomValidity('Champ requis')} onInput={(e) => e.currentTarget.setCustomValidity('')}/>
                 <FormFeedback>Numéro invalide !</FormFeedback>
             </FormGroup>
-            <FormGroup>
+            <FormGroup className="row">
+                <div className="col">
+                    <Label for="zip">Code postal <b style={{color:"#ED5B0F"}}>*</b></Label>
+                    <Input name="zip" type="number" required 
+                    onInvalid={(e) => e.currentTarget.setCustomValidity('Champ requis')} onInput={(e) => e.currentTarget.setCustomValidity('')}/>
+                    <FormText>On en a besoin pour vous trouver des entrepreneurs de votre région</FormText>
+                </div>
+                <div className="col">
                 <Label for="address">Adresse</Label>
-                <Input name="address"/>
-                <FormText>L'adresse du lieu où auront lieu les travaux</FormText>
+                    <Input name="address"/>
+                </div>
             </FormGroup>
             <FormGroup>
                 <Label for="description">Description de votre projet <b style={{color:"#ED5B0F"}}>*</b></Label>
-                <Input name="description" type="textarea" required/>
+                <Input name="description" type="textarea" required 
+                onInvalid={(e) => e.currentTarget.setCustomValidity('Champ requis')} onInput={(e) => e.currentTarget.setCustomValidity('')}/>
                 <FormText>Exemple: Je voudrais refaire ma salle de bain au complet.</FormText>
             </FormGroup>
             <b style={{color:"#ED5B0F"}}>*</b><i style={{fontSize: "12px"}}> Champs requis</i>
