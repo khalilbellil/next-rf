@@ -1,13 +1,13 @@
 
 import React from 'react'
-import CalculateurDeCouts from '../components/CalculateurDeCouts'
+import CalculateurDeCoutsPanel from '../../components/calculateurDeCoutsPanel'
 
-export default function calculateurDeCouts() {
+export default function calculateurDeCoutsPanel() {
     
     return (
         <div className="container">
             <br/><br/><br/><br/><br/>
-            <CalculateurDeCouts data={[4500, 7500, 9000]}/>
+            <CalculateurDeCoutsPanel />
             <br/><br/><br/><br/><br/>
         </div>
     )

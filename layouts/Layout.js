@@ -17,8 +17,10 @@ export default function Layout(props) {
             setLayout('intranet')
         }else if (path.includes('extranet')){
             setLayout('extranet')
-        }else{
+        }else if (path.includes('test')){
             setLayout('')
+        }else{
+            setLayout('visitor')
         }
     }, [router.pathname])
     return (
@@ -26,11 +28,11 @@ export default function Layout(props) {
             <Head>
                 <script src="https://kit.fontawesome.com/fe809503a2.js" crossOrigin="anonymous"></script>
             </Head>
-            {(layout === '')?<Header/>:(layout === 'extranet')?<ExtranetHeader/>:(layout === 'intranet')?<IntranetHeader/>:""}
+            {(layout === 'visitor')?<Header/>:(layout === 'extranet')?<ExtranetHeader/>:(layout === 'intranet')?<IntranetHeader/>:""}
             <div className="content" id="page-wrap">
                 {props.children}
             </div>
-            {(layout === '')?<Footer/>:(layout === 'extranet')?<ExtranetFooter/>:(layout === 'intranet')?<IntranetFooter/>:""}
+            {(layout === 'visitor')?<Footer/>:(layout === 'extranet')?<ExtranetFooter/>:(layout === 'intranet')?<IntranetFooter/>:""}
         </div>
     )
 }

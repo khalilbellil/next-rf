@@ -56,7 +56,6 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
         .then(res => res.json())
         .then(res => {
             if(res.success === 'yes'){
-                console.log(res.delays)
                 setDelays(res.delays)
             }else{
                 alert('Error')
@@ -141,23 +140,29 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
         setActualCity(selectedOption)
         //saveField2('code_city', selectedOption.value)
     }
-    const onChangeZip = value => {
-        setClient({...client, zip: value})
-        if(value.length === 5){
-            getCity(value)
+    const onChangeZip = (target, index) => {
+        if(target.value.length === 5){
+            getCity(target.value, index)
+        }else{
+            let newArr = [...projects]
+            newArr[index]['zip'] = target.value
+            setProjects(newArr)
         }
     }
-    const getCity = (value) => {
+    const getCity = (value, index) => {
         fetch(`https://geo.api.gouv.fr/communes?codePostal=${value}`)
         .then(res => res.json())
         .then(res => {
             if(res.length === 1){
-                setActualDepartment(res[0].codeDepartement)
-                setActualRegion(res[0].codeRegion)
-                setActualCity(cities.find(option => option.label == (res[0].nom)))
-                //saveField2('code_department', res[0].codeDepartement)
-                //saveField2('code_region', res[0].codeRegion)
-                //saveField2('code_city', cities.find(option => option.label == (res[0].nom)).value)
+                let newArr = [...projects]
+                newArr[index]['zip'] = value
+                newArr[index]['code_department'] = res[0].codeDepartement
+                newArr[index]['code_region'] = res[0].codeRegion
+                newArr[index]['code_city'] = cities.find(option => option.label == (res[0].nom)).value
+                setProjects(newArr)
+                onBlurInputProject({name: 'code_department', value: newRes[0].codeDepartement}, index)
+                onBlurInputProject({name: 'code_region', value: newRes[0].codeRegion}, index)
+                onBlurInputProject({name: 'code_city', value: cities.find(option => option.label == (newRes[0].nom)).value}, index)
             }else if(res.length > 1){
                 const newRes = res.sort(function(a, b) {    
                     if (a["population"] < b["population"]) {    
@@ -167,12 +172,15 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                     }    
                     return 0;    
                 })//order by population desc
-                setActualDepartment(newRes[0].codeDepartement)
-                setActualRegion(newRes[0].codeRegion)
-                setActualCity(cities.find(option => option.label == (newRes[0].nom)))
-                //saveField2('code_department', newRes[0].codeDepartement)
-                //saveField2('code_region', newRes[0].codeRegion)
-                //saveField2('code_city', cities.find(option => option.label == (newRes[0].nom)).value)
+                let newArr = [...projects]
+                newArr[index]['zip'] = value
+                newArr[index]['code_department'] = newRes[0].codeDepartement
+                newArr[index]['code_region'] = newRes[0].codeRegion
+                newArr[index]['code_city'] = cities.find(option => option.label == (newRes[0].nom)).value
+                setProjects(newArr)
+                onBlurInputProject({name: 'code_department', value: newRes[0].codeDepartement}, index)
+                onBlurInputProject({name: 'code_region', value: newRes[0].codeRegion}, index)
+                onBlurInputProject({name: 'code_city', value: cities.find(option => option.label == (newRes[0].nom)).value}, index)
             }else{
                 alert('Code postal inconnu')
             }
@@ -211,10 +219,20 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
             .catch(err => console.log("ERROR: ", err))
         }
     }
-    const onChangeInputProject = (target, index) => {
-        let newArr = [...projects]
-        newArr[index][target.name] = target.value
-        setProjects(newArr)
+    const onChangeInputProject = (e, index, name = undefined) => {
+        if(e.target){
+            let newArr = [...projects]
+            newArr[index][e.target.name] = e.target.value
+            setProjects(newArr)
+            if(e.target.type === 'select'){
+                onBlurInputProject(e.target, index)
+            }
+        }else{
+            let newArr = [...projects]
+            newArr[index][name] = e.value
+            setProjects(newArr)
+            onBlurInputProject({name: name, value: e.value}, index)
+        }
     }
     const onBlurInputProject = (target, index) => {
         fetch('/api/intranet/gestion-clients/save-field', {
@@ -302,7 +320,7 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                     <FormGroup>
                         <Label for="address_client">Adresse principale</Label>
                         <Input name="address_client" type="text" disabled={(!client)} value={(client)?client?.address:""} 
-                        onChange={(e) => setClient({...client, [e.target.name]: e.target.value})} onBlur={(e) => onBlurInputProject(e.target, undefined)}/>
+                        onChange={(e) => setClient({...client, ['address']: e.target.value})} onBlur={(e) => onBlurInputProject(e.target, undefined)}/>
                     </FormGroup>
                     <div className="row pl-3 pr-3">
                         <Button className="col btn-primary-intranet" color="primary" onClick={(e) => getNext()}>Fiche suivante <i className="fas fa-chevron-circle-right"></i></Button>
@@ -327,8 +345,8 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                                     <div className="col-2">
                                         {
                                             (item.callbackui)?(<div className="row">
-                                                <Input className="col" type='date' name="callbacklater_date" onChange={(e) => onChangeInputProject(e.target, i)} value={item.callbacklater_date}/>
-                                                <Input className="col" type='time' name="callbacklater_time" onChange={(e) => onChangeInputProject(e.target, i)} value={item.callbacklater_time}/>
+                                                <Input className="col" type='date' name="callbacklater_date" onChange={(e) => onChangeInputProject(e, i)} value={item.callbacklater_date}/>
+                                                <Input className="col" type='time' name="callbacklater_time" onChange={(e) => onChangeInputProject(e, i)} value={item.callbacklater_time}/>
                                                 <Button onClick={e => handleCallBackLater(i)}>Valider</Button>
                                             </div>):''
                                         }
@@ -353,20 +371,20 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                                 <FormGroup>
                                     <Label for="description">Description <b style={{color:"#ED5B0F"}}>*</b></Label>
                                     <Input type="textarea" name="description" value={item.description} 
-                                    onChange={(e) => onChangeInputProject(e.target, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
+                                    onChange={(e) => onChangeInputProject(e, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
                                 </FormGroup>
                                 <FormGroup className="row">
                                     <div className='col'>
                                         <Label for="id_service">Service <b style={{color:"#ED5B0F"}}>*</b></Label>
                                         <Input name="id_service" type="select" value={item.id_service} 
-                                        onChange={(e) => onChangeInputProject(e.target, i)}>
+                                        onChange={(e) => onChangeInputProject(e, i)}>
                                             <option>Choisir</option>
                                         </Input>
                                     </div>
                                     <div className='col'>
                                         <Label for="id_subservice">Sous service <b style={{color:"#ED5B0F"}}>*</b></Label>
                                         <Input name="id_subservice" type="select" value={item.id_subservice} 
-                                        onChange={(e) => onChangeInputProject(e.target, i)}>
+                                        onChange={(e) => onChangeInputProject(e, i)}>
                                             <option>Choisir</option>
                                         </Input>
                                     </div>
@@ -375,12 +393,12 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                                     <div className='col'>
                                         <Label for="budget">Budget</Label>
                                         <Input name="budget" type="text" value={item.budget} 
-                                        onChange={(e) => onChangeInputProject(e.target, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
+                                        onChange={(e) => onChangeInputProject(e, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
                                     </div>
                                     <div className='col-5'>
                                         <Label for="id_project_delay">Délais avant début des travaux <b style={{color:"#ED5B0F"}}>*</b></Label>
                                         <Input name="id_project_delay" type="select" value={item.id_project_delay} 
-                                        onChange={(e) => onChangeInputProject(e.target, i)}>
+                                        onChange={(e) => onChangeInputProject(e, i)}>
                                             <option>Choisir</option>
                                             {
                                                 (delays)?delays.map(function(item, i){
@@ -394,14 +412,14 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                                     <div className='col-4'>
                                         <Label for="zip">Code Postal <b style={{color:"#ED5B0F"}}>*</b></Label>
                                         <Input name="zip" type="text" value={item.zip} 
-                                        onChange={(e) => onChangeInputProject(e.target, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
+                                        onChange={(e) => onChangeInputProject(e, i)} onBlur={(e) => onChangeZip(e.target, i)}/>
                                     </div>
                                     <div className='col'>
                                         <Label for="code_department">Département <b style={{color:"#ED5B0F"}}>*</b></Label>
                                         <Select
                                             name="code_department"
-                                            value={(actualDepartment)?departments.find(option => option.value == actualDepartment):""}
-                                            onChange={(e) => onChangeInputProject(e.target, i)}
+                                            value={(item.code_department)?departments.find(option => option.value == item.code_department):""}
+                                            onChange={(e) => onChangeInputProject(e, i, 'code_department')}
                                             options={(departments)?departments:""}
                                         />
                                     </div>
@@ -413,16 +431,16 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                                             cacheOptions
                                             loadOptions={promiseOptions}
                                             defaultOptions={defaultCities}
-                                            value={actualCity}
-                                            onChange={(e) => onChangeInputProject(e.target, i)}
+                                            value={(item.code_city)?cities.find(option => option.value == item.code_city):""}
+                                            onChange={(e) => onChangeInputProject(e, i, 'code_city')}
                                         />
                                     </div>
                                     <div className='col'>
                                         <Label for="code_region">Région <b style={{color:"#ED5B0F"}}>*</b></Label>
                                         <Select
                                             name="code_region"
-                                            value={(actualRegion)?regions.find(option => option.value == actualRegion):""}
-                                            onChange={(e) => onChangeInputProject(e.target, i)} 
+                                            value={(item.code_region)?regions.find(option => option.value == item.code_region):""}
+                                            onChange={(e) => onChangeInputProject(e, i, 'code_region')} 
                                             options={(regions)?regions:""}
                                         />
                                     </div>
@@ -431,7 +449,7 @@ export default function gestionClients({citiesD, regionsD, departmentsD}) {
                                 <FormGroup>
                                     <Label for="address">Adresse <b style={{color:"#ED5B0F"}}>*</b></Label>
                                     <Input name="address" type="text" value={item.address} 
-                                    onChange={(e) => onChangeInputProject(e.target, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
+                                    onChange={(e) => onChangeInputProject(e, i)} onBlur={(e) => onBlurInputProject(e.target, i)}/>
                                 </FormGroup>
                             </CardBody>
                         </Card>
