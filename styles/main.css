@@ -193,3 +193,121 @@ input[type=number] {
 .service-card:hover{
     background-color: #1580b9;
 }
+
+    /*  */
+
+/*Title Default*/
+h1 {
+  margin: 1em 0;
+  text-align: center;
+  border-bottom: 1px dashed;
+  padding-bottom: 1em;
+  font-weight: lighter;
+}
+
+/*Treeview ***********************************************/
+.treeview input[type=checkbox]{
+  display:none
+}
+
+.treeview,
+.treeview ul{
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.treeview li{
+	padding-left: 27px;
+	position: relative;
+	font-size: 1rem;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column
+}
+.treeview > li{
+	padding-left: 0;
+}
+
+.treeview ul{
+	max-height: 0;
+	-webkit-transition: .8s ease;
+	-moz-transition: .8s ease;
+	-ms-transition: .8s ease;
+	-o-transition: .8s ease;
+}
+
+.treeview li input:nth-of-type(1):checked ~ ul{
+	max-height: 1000px;
+}
+
+.treeview li label{
+  padding: 16px;
+  padding-left: 78px;
+  background-color: #f3f3f4;
+  cursor: pointer;
+  border-radius: 100px;
+  height: 65px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+.treeview li label i{
+  font-size: 14px
+}
+.treeview li label > span{
+  margin: 0 20px
+}
+.treeview li label input[type=text]{
+  flex: 1;
+  color: #676A6C;
+  background: white;
+  border: none;
+  border-radius: 3px;
+  transition: .2s ease;
+  padding: 9px;
+  margin-left: 10px;
+  background: none
+}
+.treeview li label input[type=text]:focus,
+.treeview li label input[type=text]:hover{
+  background: white
+}
+
+.treeview li label:not(.child):before{
+  transition: .3s ease;
+  position: absolute;
+  margin-left: -16px;
+}
+.treeview li label:not(.child):before{
+  font: normal normal normal 14px/1 FontAwesome;
+	content: "\f054";
+}
+
+.treeview li input[type=checkbox]:checked + label:before{
+  transform: rotate(90deg);
+}
+.treeview .ball{
+  left: 16px;
+  margin-left: -60px;
+  padding-right: 30px;
+}
+.treeview .ball:before{
+  color: #fff;
+  position: relative;
+  display: flex;
+  border-radius: 50%;
+  background-color: #23c6c8;
+  align-items: center;
+  height: 23px;
+  width: 23px;
+  font-size: 13px;
+  justify-content: center;
+  content: attr(data-id);
+}
+.treeview .action-list{
+  margin-left: auto
+}
+.treeview .action-list i{
+  margin-left: 15px
+}

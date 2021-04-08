@@ -36,6 +36,7 @@
     "react": "16.13.1",
     "react-burger-menu": "^2.9.2",
     "react-chartjs-2": "^2.11.1",
+    "react-d3-tree": "^2.0.1",
     "react-dom": "16.13.1",
     "react-infinite-scroll-component": "^6.0.0",
     "react-notification-alert": "0.0.12",
