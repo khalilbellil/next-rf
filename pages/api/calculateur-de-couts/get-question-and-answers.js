@@ -7,7 +7,6 @@ module.exports = async (req, res) => {
     let { id_next_question } = req.body
     try {
         three = await global.getNextQuestionAndAnswers(id_next_question)
-        console.log('three', three)
         success = 'yes'
     } catch (error) {
         console.log(error)

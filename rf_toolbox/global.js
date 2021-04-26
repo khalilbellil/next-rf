@@ -10,8 +10,8 @@ export async function getNextQuestionAndAnswers(id_next_question){
     let three = {}
     const first = await db.query(`SELECT * FROM sr_cost_calculator_question WHERE id='${id_next_question}'`)
     three.name = first[0].name
-    three.attributes = first[0]
-
+    three.attributes = {...first[0], type: 'question'}
+    
     three.children = await getChildren(id_next_question, true)
     return three
 }
@@ -29,13 +29,15 @@ export async function getChildren(id_next_question, isAnAnswer, isField = false)
         if(answers[0]?.answer_is_a_field == 1){
             new_children[0] = {
                 name: answers[0].name,
-                attributes: answers[0],
+                attributes: {...answers[0], type: (isAnAnswer)?'answer':'question'},
                 children: [
                     {
                         name:'FIELD',
                         attributes:{
                             answer_is_a_field: 1,
-                            id_next_question: answers[0].id_field_next_question
+                            id_next_question: answers[0].id_field_next_question,
+                            id_question: answers[0].id,
+                            type: 'answer'
                         },
                         children: await getChildren(answers[0].id_field_next_question, false)
                     }
@@ -46,7 +48,8 @@ export async function getChildren(id_next_question, isAnAnswer, isField = false)
                 const element = answers[i];
                 new_children[i] = {
                     name: element.name,
-                    attributes: element,
+                    attributes: {...element, type: (isAnAnswer)?'answer':'question'},
+                    type: (isAnAnswer)?'answer':'question',
                     children: (isAnAnswer)?await getChildren(element.id_next_question, false):await getChildren(id_next_question, true)
                 }
             }

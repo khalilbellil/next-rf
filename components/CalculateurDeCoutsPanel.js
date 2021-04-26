@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Button, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from 'reactstrap'
+import { Button, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table, Form } from 'reactstrap'
 import Tree from 'react-d3-tree';
 
 export default function CalculateurDeCoutsPanel() {
@@ -7,8 +7,14 @@ export default function CalculateurDeCoutsPanel() {
     const [actualService, setActualService] = useState(undefined)
     const [questions, setQuestions] = useState(undefined)
     const [selectedNode, setSelectedNode] = useState({})
+    const [newAnswer, setNewAnswer] = useState({})
+    const [newQuestion, setNewQuestion] = useState({})
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
+    const [modal2, setModal2] = useState(false);
+    const toggle2 = () => setModal2(!modal2);
+    const [modal3, setModal3] = useState(false);
+    const toggle3 = () => setModal3(!modal3);
     
     useEffect(() => {
         resetUI()
@@ -37,6 +43,7 @@ export default function CalculateurDeCoutsPanel() {
         .catch(err => console.log("ERROR: ", err))
     }
     const getQuestionsAndAnswers = (id_next_question) => {
+        setQuestions({})
         fetch('/api/calculateur-de-couts/get-question-and-answers', {
             method: 'POST',
             headers: {
@@ -223,7 +230,82 @@ export default function CalculateurDeCoutsPanel() {
         toggle()
     }
     const handleSaveClick = (e) => {
-        
+        fetch('/api/calculateur-de-couts/save-fields', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                attributes: selectedNode
+            })
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success === 'yes'){
+                getQuestionsAndAnswers(actualService.id_next_question)
+                toggle()
+            }else{
+                alert('Une erreur est survenue, merci de nous contactez directement.')
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
+    }
+
+    const createNewAnswer = (e) => {
+        e.preventDefault()
+        fetch('/api/calculateur-de-couts/create-new-answer', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: newAnswer.name,
+                influence_method: (newAnswer.influence_method)?newAnswer.influence_method:undefined,
+                influence_value: (newAnswer.influence_value)?newAnswer.influence_value:undefined,
+                id_question: selectedNode.id
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success === 'yes'){
+                getQuestionsAndAnswers(actualService.id_next_question)
+                toggle()
+                toggle2()
+            }else{
+                alert('Une erreur est survenue, merci de nous contactez directement...')
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
+    }
+
+    const createNewQuestion = (e) => {
+        e.preventDefault()
+        fetch('/api/calculateur-de-couts/create-new-question', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: newQuestion.name,
+                answer_is_a_field: newQuestion.answer_is_a_field,
+                id_parent_answer: selectedNode.id,
+                id_question: selectedNode.id_question
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success === 'yes'){
+                getQuestionsAndAnswers(actualService.id_next_question)
+                toggle()
+                toggle3()
+            }else{
+                alert('Une erreur est survenue, merci de nous contactez directement...')
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
     }
 
     return (
@@ -244,11 +326,11 @@ export default function CalculateurDeCoutsPanel() {
                     </Input>
                 </FormGroup>
             </div>
-                {
-                    (actualService)?(<>
-                    <div className="row pl-3 pr-3 pt-2">
-                        <div className="col p-0" style={{border: "2px solid #00517E", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius:"6px"}}>
-                            <Table>
+            {
+                (actualService)?(<>
+                <div className="row pl-3 pr-3 pt-2">
+                    <div className="col p-0" style={{border: "2px solid #00517E", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius:"6px"}}>
+                        <Table>
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -272,34 +354,102 @@ export default function CalculateurDeCoutsPanel() {
                                     </tr>
                                 </tbody>
                             </Table>
-                        </div>
                     </div>
-                    {
-                        (questions)?(<div className="row pl-3 pr-3 pt-2"><div className="col p-0" style={{border: "2px solid #00517E", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius:"6px", minHeight:"800px"}}>
-                            <Tree data={questions} pathFunc="diagonal" orientation="vertical" onNodeClick={(e) => onNodeClick(e)} collapsible={false}/>
-                        </div></div>):''
-                    }
-                    </>):''
+                </div>
+                {
+                    (questions)?(<div className="row pl-3 pr-3 pt-2"><div className="col p-0" style={{border: "2px solid #00517E", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius:"6px", minHeight:"800px"}}>
+                        <Tree data={questions} pathFunc="diagonal" orientation="vertical" onNodeClick={(e) => onNodeClick(e)}  onNodeMouseOver={(e) => console.log('e', e)} collapsible={false}/>
+                    </div></div>):''
                 }
+                </>):''
+            }
+            <Modal isOpen={modal} toggle={toggle}>
+                <ModalHeader toggle={toggle}>Modification</ModalHeader>
+                <ModalBody>
+                    {
+                        (selectedNode)?Object.keys(selectedNode).map((item, i) => {
+                            if(item !== 'type' && item !== 'id_question' && item !== 'id_next_question'){
+                                switch (item) {
+                                    case 'influence_method':
+                                        return (<>
+                                         <Label>Méthode d'influence du prix</Label>
+                                         <Input type="select" value={selectedNode[item]} onChange={e => setSelectedNode({...selectedNode, [item]:e.target.value})}>
+                                             <option value="">Ne rien faire</option>
+                                             <option value="wait">Multiplier VALEUR avec le prochain input puis additioner au prix</option>
+                                             <option value="+%">Augmentation de VALEUR% du prix</option>
+                                             <option value="-%">Réduction de VALEUR% du prix</option>
+                                         </Input>
+                                         </>)
 
-                <Modal isOpen={modal} toggle={toggle}>
-                    <ModalHeader toggle={toggle}>Modification</ModalHeader>
-                    <ModalBody>
-                        {
-                            (selectedNode)?Object.keys(selectedNode).map((item, i) => {
-                                return (<>
-                                    <Label>{item}</Label>
-                                    <Input type="text" value={selectedNode[item]} disabled={(item === 'id')}/>
-                                </>)
-                            }):''
-                        }
-                    </ModalBody>
-                    <ModalFooter>
-                    <Button color="primary" onClick={handleSaveClick}>Sauvegarder</Button>{' '}
-                    <Button color="secondary" onClick={toggle}>Annuler</Button>
-                    </ModalFooter>
-                </Modal>
+                                    case 'answer_is_a_field':
+                                        return (selectedNode["type"] == 'answer')?(<>
+                                        
+                                        </>):(<>
+                                            <Label>La réponse sera un champ ?</Label>
+                                            <Input type="select" name="answer_is_a_field" value={selectedNode[item]} onChange={e => setSelectedNode({...selectedNode, [item]:e.target.value})}>
+                                                <option value="">Non</option>
+                                                <option value="1">Oui</option>
+                                            </Input>
+                                        </>)
 
+                                    default:
+                                         return (<>
+                                         <Label>{item}</Label>
+                                         <Input type="text" value={selectedNode[item]} disabled={(item === 'id')} onChange={e => setSelectedNode({...selectedNode, [item]:e.target.value})}/>
+                                         </>)
+                                }
+                            }
+                        }):''
+                    }
+                </ModalBody>
+                <ModalFooter>
+                {
+                    (selectedNode['type'] === 'answer')?(<>
+                        <Button color="secondary" onClick={toggle3}>Ajouter une question</Button>
+                    </>):(<>
+                        <Button color="secondary" onClick={toggle2}>Ajouter une réponse</Button>
+                    </>)
+                }
+                <Button color="primary" onClick={handleSaveClick}>Sauvegarder</Button>{' '}
+                <Button color="secondary" onClick={toggle}>Annuler</Button>
+                </ModalFooter>
+            </Modal>
+            <Modal isOpen={modal2} toggle={toggle2}>
+                <ModalHeader toggle={toggle2}>Création d'une réponse</ModalHeader>
+                <ModalBody>
+                    <Label>Nom</Label>
+                    <Input type="text" name="name" value={newAnswer?.name} onChange={e => setNewAnswer({...newAnswer, [e.target.name]:e.target.value})}/>
+                    <Label>Méthode d'influence du prix</Label>
+                    <Input type="select" name="influence_method" value={newAnswer?.influence_method} onChange={e => setNewAnswer({...newAnswer, [e.target.name]:e.target.value})}>
+                        <option value="">Ne rien faire</option>
+                        <option value="wait">Multiplier VALEUR avec le prochain input puis additioner au prix</option>
+                        <option value="+%">Augmentation de VALEUR% du prix</option>
+                        <option value="-%">Réduction de VALEUR% du prix</option>
+                    </Input>
+                    <Label>Valeur d'influence du prix</Label>
+                    <Input type="text" name="influence_value" value={newAnswer?.influence_value} onChange={e => setNewAnswer({...newAnswer, [e.target.name]:e.target.value})}/>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={createNewAnswer}>Créer la réponse</Button>{' '}
+                    <Button color="secondary" onClick={toggle2}>Annuler</Button>
+                </ModalFooter>
+            </Modal>
+            <Modal isOpen={modal3} toggle={toggle3}>
+                <ModalHeader toggle={toggle3}>Création d'une question</ModalHeader>
+                <ModalBody>
+                    <Label>Nom</Label>
+                    <Input type="text" name="name" value={newQuestion?.name} onChange={e => setNewQuestion({...newQuestion, [e.target.name]:e.target.value})}/>
+                    <Label>La réponse sera un champ ?</Label>
+                    <Input type="select" name="answer_is_a_field" value={newQuestion?.answer_is_a_field} onChange={e => setNewQuestion({...newQuestion, [e.target.name]:e.target.value})}>
+                        <option value="">Non</option>
+                        <option value="1">Oui</option>
+                    </Input>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={createNewQuestion}>Créer la question</Button>{' '}
+                    <Button color="secondary" onClick={toggle3}>Annuler</Button>
+                </ModalFooter>
+            </Modal>
             <br/>
         </div>
     )
