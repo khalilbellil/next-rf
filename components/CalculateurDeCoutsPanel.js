@@ -9,12 +9,16 @@ export default function CalculateurDeCoutsPanel() {
     const [selectedNode, setSelectedNode] = useState({})
     const [newAnswer, setNewAnswer] = useState({})
     const [newQuestion, setNewQuestion] = useState({})
-    const [modal, setModal] = useState(false);
-    const toggle = () => setModal(!modal);
-    const [modal2, setModal2] = useState(false);
-    const toggle2 = () => setModal2(!modal2);
-    const [modal3, setModal3] = useState(false);
-    const toggle3 = () => setModal3(!modal3);
+    const [newService, setNewService] = useState({})
+
+    const [modifModal, setModifModal] = useState(false);
+    const modifToggle = () => setModifModal(!modifModal);
+    const [answerModal, setanswerModal] = useState(false);
+    const answerToggle = () => setanswerModal(!answerModal);
+    const [questionModal, setquestionModal] = useState(false);
+    const questionToggle = () => setquestionModal(!questionModal);
+    const [serviceModal, setServiceModal] = useState(false);
+    const serviceToggle = () => setServiceModal(!serviceModal);
     
     useEffect(() => {
         resetUI()
@@ -227,7 +231,7 @@ export default function CalculateurDeCoutsPanel() {
 
     const onNodeClick = (e) => {
         setSelectedNode(e.attributes)
-        toggle()
+        modifToggle()
     }
     const handleSaveClick = (e) => {
         fetch('/api/calculateur-de-couts/save-fields', {
@@ -244,7 +248,7 @@ export default function CalculateurDeCoutsPanel() {
         .then(res => {
             if(res.success === 'yes'){
                 getQuestionsAndAnswers(actualService.id_next_question)
-                toggle()
+                modifToggle()
             }else{
                 alert('Une erreur est survenue, merci de nous contactez directement.')
             }
@@ -271,15 +275,14 @@ export default function CalculateurDeCoutsPanel() {
         .then(res => {
             if(res.success === 'yes'){
                 getQuestionsAndAnswers(actualService.id_next_question)
-                toggle()
-                toggle2()
+                modifToggle()
+                answerToggle()
             }else{
                 alert('Une erreur est survenue, merci de nous contactez directement...')
             }
         })
         .catch(err => console.log("ERROR: ", err))
     }
-
     const createNewQuestion = (e) => {
         e.preventDefault()
         fetch('/api/calculateur-de-couts/create-new-question', {
@@ -287,8 +290,9 @@ export default function CalculateurDeCoutsPanel() {
             body: JSON.stringify({
                 name: newQuestion.name,
                 answer_is_a_field: newQuestion.answer_is_a_field,
-                id_parent_answer: selectedNode.id,
-                id_question: selectedNode.id_question
+                id_parent_answer: selectedNode?.id,
+                id_question: selectedNode?.id_question,
+                id_parent_service: (!actualService.id_next_question)?actualService.id:undefined
             }),
             headers: {
                 'Accept': 'application/json',
@@ -298,9 +302,34 @@ export default function CalculateurDeCoutsPanel() {
         .then(res => res.json())
         .then(res => {
             if(res.success === 'yes'){
-                getQuestionsAndAnswers(actualService.id_next_question)
-                toggle()
-                toggle3()
+                getQuestionsAndAnswers(res.insertedId)
+                setActualService({...actualService, id_next_question: res.insertedId})
+                questionToggle()
+            }else{
+                alert('Une erreur est survenue, merci de nous contactez directement...')
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
+    }
+    const createNewService = (e) => {
+        e.preventDefault()
+        fetch('/api/calculateur-de-couts/create-new-service', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: newService.name,
+                min_price: newService.min_price,
+                interval_precision: newService.interval_precision
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success === 'yes'){
+                setServiceModal(false)
+                getServices()
             }else{
                 alert('Une erreur est survenue, merci de nous contactez directement...')
             }
@@ -324,6 +353,7 @@ export default function CalculateurDeCoutsPanel() {
                             ):<option></option>
                         }
                     </Input>
+                    <Button onClick={serviceToggle}>Créer un service</Button>
                 </FormGroup>
             </div>
             {
@@ -331,7 +361,7 @@ export default function CalculateurDeCoutsPanel() {
                 <div className="row pl-3 pr-3 pt-2">
                     <div className="col p-0" style={{border: "2px solid #00517E", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius:"6px"}}>
                         <Table>
-                                <thead>
+                            <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>id_service</th>
@@ -342,18 +372,22 @@ export default function CalculateurDeCoutsPanel() {
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">{actualService.id}</th>
-                                        <td>{actualService.id_service}</td>
-                                        <td>{actualService.id_next_question}</td>
-                                        <td>{actualService.name}</td>
-                                        <td>{actualService.min_price}</td>
-                                        <td>{actualService.interval_precision}</td>
-                                        <td><i className="far fa-edit mr-3" style={{cursor: "pointer"}}></i><i className="far fa-folder-open" style={{cursor: "pointer"}} onClick={(e) => getQuestionsAndAnswers(actualService.id_next_question)}></i></td>
-                                    </tr>
-                                </tbody>
-                            </Table>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">{actualService.id}</th>
+                                    <td>{actualService.id_service}</td>
+                                    <td>{actualService.id_next_question}</td>
+                                    <td>{actualService.name}</td>
+                                    <td>{actualService.min_price}</td>
+                                    <td>{actualService.interval_precision}</td>
+                                    <td><i className="far fa-edit" style={{cursor: "pointer"}} onClick={(e) => getQuestionsAndAnswers(actualService.id_next_question)}></i></td>
+                                </tr>
+                            </tbody>
+                        </Table>
+                        {
+                            (!actualService.id_next_question)?(<Button onClick={questionToggle}>Créer la premiere question</Button>):''
+                        }
+                        
                     </div>
                 </div>
                 {
@@ -363,8 +397,8 @@ export default function CalculateurDeCoutsPanel() {
                 }
                 </>):''
             }
-            <Modal isOpen={modal} toggle={toggle}>
-                <ModalHeader toggle={toggle}>Modification</ModalHeader>
+            <Modal isOpen={modifModal} toggle={modifToggle}>
+                <ModalHeader toggle={modifToggle}>Modification</ModalHeader>
                 <ModalBody>
                     {
                         (selectedNode)?Object.keys(selectedNode).map((item, i) => {
@@ -405,17 +439,17 @@ export default function CalculateurDeCoutsPanel() {
                 <ModalFooter>
                 {
                     (selectedNode['type'] === 'answer')?(<>
-                        <Button color="secondary" onClick={toggle3}>Ajouter une question</Button>
+                        <Button color="secondary" onClick={questionToggle}>Ajouter une question</Button>
                     </>):(<>
-                        <Button color="secondary" onClick={toggle2}>Ajouter une réponse</Button>
+                        <Button color="secondary" onClick={answerToggle}>Ajouter une réponse</Button>
                     </>)
                 }
                 <Button color="primary" onClick={handleSaveClick}>Sauvegarder</Button>{' '}
-                <Button color="secondary" onClick={toggle}>Annuler</Button>
+                <Button color="secondary" onClick={modifToggle}>Annuler</Button>
                 </ModalFooter>
             </Modal>
-            <Modal isOpen={modal2} toggle={toggle2}>
-                <ModalHeader toggle={toggle2}>Création d'une réponse</ModalHeader>
+            <Modal isOpen={answerModal} toggle={answerToggle}>
+                <ModalHeader toggle={answerToggle}>Création d'une réponse</ModalHeader>
                 <ModalBody>
                     <Label>Nom</Label>
                     <Input type="text" name="name" value={newAnswer?.name} onChange={e => setNewAnswer({...newAnswer, [e.target.name]:e.target.value})}/>
@@ -431,11 +465,11 @@ export default function CalculateurDeCoutsPanel() {
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={createNewAnswer}>Créer la réponse</Button>{' '}
-                    <Button color="secondary" onClick={toggle2}>Annuler</Button>
+                    <Button color="secondary" onClick={answerToggle}>Annuler</Button>
                 </ModalFooter>
             </Modal>
-            <Modal isOpen={modal3} toggle={toggle3}>
-                <ModalHeader toggle={toggle3}>Création d'une question</ModalHeader>
+            <Modal isOpen={questionModal} toggle={questionToggle}>
+                <ModalHeader toggle={questionToggle}>Création d'une question</ModalHeader>
                 <ModalBody>
                     <Label>Nom</Label>
                     <Input type="text" name="name" value={newQuestion?.name} onChange={e => setNewQuestion({...newQuestion, [e.target.name]:e.target.value})}/>
@@ -447,7 +481,22 @@ export default function CalculateurDeCoutsPanel() {
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={createNewQuestion}>Créer la question</Button>{' '}
-                    <Button color="secondary" onClick={toggle3}>Annuler</Button>
+                    <Button color="secondary" onClick={questionToggle}>Annuler</Button>
+                </ModalFooter>
+            </Modal>
+            <Modal isOpen={serviceModal} toggle={serviceToggle}>
+                <ModalHeader toggle={serviceToggle}>Création d'un service</ModalHeader>
+                <ModalBody>
+                    <Label>Nom</Label>
+                    <Input type="text" name="name" value={newService?.name} onChange={e => setNewService({...newService, [e.target.name]:e.target.value})}/>
+                    <Label>Prix minimum</Label>
+                    <Input type="text" name="min_price" value={newService?.min_price} onChange={e => setNewService({...newService, [e.target.name]:e.target.value})}/>
+                    <Label>Intervalle de précision</Label>
+                    <Input type="text" name="interval_precision" value={newService?.interval_precision} onChange={e => setNewService({...newService, [e.target.name]:e.target.value})}/>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={createNewService}>Créer le service</Button>{' '}
+                    <Button color="secondary" onClick={serviceToggle}>Annuler</Button>
                 </ModalFooter>
             </Modal>
             <br/>

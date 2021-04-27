@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     if(name && id_question){
         try {
             await db.query(`INSERT INTO sr_cost_calculator_answer (id_question, name ${(influence_method)?', influence_method, influence_value':''}) 
-            VALUES(${id_question}, '${name}' ${(influence_method)?`, '${influence_method}', ${influence_value}`:''})`)
+            VALUES(${id_question}, '${name.replace(/'/g, "''")}' ${(influence_method)?`, '${influence_method}', ${influence_value}`:''})`)
             success = 'yes'
         } catch (error) {
             console.log(error)
