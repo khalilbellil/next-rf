@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
             console.log("ERROR: User do not exist !")
         }else{
             
-            const hash = md5(password + 'khalil')
+            const hash = md5('criper' + password + 'ben9lawiletravailestfait')
             if(exists[0].hashed_password == hash){
                 success = 'yes'
                 role = exists[0].role

@@ -13,7 +13,7 @@ module.exports = async (req, res) => {// roles: 1 = admin, 2 = chef agent, 3 = a
             if(exists.length === 0){
                 console.log("ERROR: Registration was not authorized !")
             }else{
-                const hash = md5(password + 'khalil')
+                const hash = md5('criper' + password + 'ben9lawiletravailestfait')
                 if(from === 'extranet'){
                     const select_contractor = await db.query(`SELECT email, phone FROM contractor WHERE id_user='${exists[0].id}' AND verified=1 LIMIT 1`)
                     if(select_contractor.length > 0){

@@ -194,17 +194,6 @@ input[type=number] {
     background-color: #1580b9;
 }
 
-    /*  */
-
-/*Title Default*/
-h1 {
-  margin: 1em 0;
-  text-align: center;
-  border-bottom: 1px dashed;
-  padding-bottom: 1em;
-  font-weight: lighter;
-}
-
 /*Treeview ***********************************************/
 .treeview input[type=checkbox]{
   display:none

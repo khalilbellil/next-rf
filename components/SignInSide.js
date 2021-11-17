@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: "#FC6119!important"
+        marginTop: "30px",
+        backgroundColor: "white"
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -56,7 +56,7 @@ export default function SignInSide() {
                 <LockOutlinedIcon style={{color:"#FC6119!important"}}/>
             </Avatar>
             <Typography component="h1" variant="h5" style={{color:"#FC6119!important"}}>
-                Connexion Entrepreneur
+                Connexion entrepreneur
             </Typography>
             <form className={classes.form} noValidate>
                 <TextField
