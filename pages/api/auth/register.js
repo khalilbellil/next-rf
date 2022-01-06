@@ -1,9 +1,10 @@
 const db = require('../../../lib/db')
-var md5 = require("md5")
+var md5 = require("md5")
 const automail = require('../../../rf_toolbox/automail')
 
 module.exports = async (req, res) => {// roles: 1 = admin, 2 = chef agent, 3 = agent, 4 = contractor
-    let { password, from, token } = req.body
+    let { username, password, from, token } = req.body
+    console.log(req.body)
     var success = 'no'
     var id_user = ''
     try {
@@ -21,16 +22,17 @@ module.exports = async (req, res) => {// roles: 1 = admin, 2 = chef agent, 3 = a
                         success = 'yes'
                     }
                 }else if(from === 'intranet'){
-                    const select_employee = await db.query(`SELECT email FROM employee WHERE id_user='${exists[0].id}' LIMIT 1`)
-                    if(select_employee.length > 0){
-                        await db.query(`UPDATE user SET username='${select_employee[0].email}', role=3, hashed_password='${hash}' WHERE token='${token}'`)
+                    //const select_employee = await db.query(`SELECT email FROM employee WHERE id_user='${exists[0].id}' LIMIT 1`)
+                    //if(select_employee.length > 0){
+                        await db.query(`UPDATE user SET username='${username}', role=3, hashed_password='${hash}', m_date=NOW() WHERE token='${token}'`)
                         success = 'yes'
-                    }
+                    //}
                 }
             }
         }
     } catch (error) {
         console.log(error)
+        success = 'no'
     }
     
     res.status(200).json({

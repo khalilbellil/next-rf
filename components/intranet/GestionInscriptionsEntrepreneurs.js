@@ -29,10 +29,14 @@ export default function GestionInscriptionsEntrepreneurs({ citiesP, regionsP, de
     const defaultCities = [
         {"label":"L'Abergement-Clémenciat","value":"01001","codeDepartement":"01","codeRegion":"84","codesPostaux":["01400"],"population":767},{"label":"L'Abergement-de-Varey","value":"01002","codeDepartement":"01","codeRegion":"84","codesPostaux":["01640"],"population":243},{"label":"Ambérieu-en-Bugey","value":"01004","codeDepartement":"01","codeRegion":"84","codesPostaux":["01500"],"population":14081},{"label":"Ambérieux-en-Dombes","value":"01005","codeDepartement":"01","codeRegion":"84","codesPostaux":["01330"],"population":1671},{"label":"Ambléon","value":"01006","codeDepartement":"01","codeRegion":"84","codesPostaux":["01300"],"population":110},{"label":"Ambronay","value":"01007","codeDepartement":"01","codeRegion":"84","codesPostaux":["01500"],"population":2684},{"label":"Ambutrix","value":"01008","codeDepartement":"01","codeRegion":"84","codesPostaux":["01500"],"population":750},{"label":"Andert-et-Condon","value":"01009","codeDepartement":"01","codeRegion":"84","codesPostaux":["01300"],"population":336},{"label":"Anglefort","value":"01010","codeDepartement":"01","codeRegion":"84","codesPostaux":["01350"],"population":1124},{"label":"Apremont","value":"01011","codeDepartement":"01","codeRegion":"84","codesPostaux":["01100"],"population":383},{"label":"Aranc","value":"01012","codeDepartement":"01","codeRegion":"84","codesPostaux":["01110"],"population":326},{"label":"Arandas","value":"01013","codeDepartement":"01","codeRegion":"84","codesPostaux":["01230"],"population":148},{"label":"Arbent","value":"01014","codeDepartement":"01","codeRegion":"84","codesPostaux":["01100"],"population":3379},{"label":"Arboys en Bugey","value":"01015","codeDepartement":"01","codeRegion":"84","codesPostaux":["01300"],"population":640},{"label":"Arbigny","value":"01016","codeDepartement":"01","codeRegion":"84","codesPostaux":["01190"],"population":462},{"label":"Argis","value":"01017","codeDepartement":"01","codeRegion":"84","codesPostaux":["01230"],"population":438},{"label":"Armix","value":"01019","codeDepartement":"01","codeRegion":"84","codesPostaux":["01510"],"population":26},{"label":"Ars-sur-Formans","value":"01021","codeDepartement":"01","codeRegion":"84","codesPostaux":["01480"],"population":1389},{"label":"Artemare","value":"01022","codeDepartement":"01","codeRegion":"84","codesPostaux":["01510"],"population":1227},{"label":"Asnières-sur-Saône","value":"01023","codeDepartement":"01","codeRegion":"84","codesPostaux":["01570"],"population":63},{"label":"Attignat","value":"01024","codeDepartement":"01","codeRegion":"84","codesPostaux":["01340"],"population":3270},{"label":"Bâgé-Dommartin","value":"01025","codeDepartement":"01","codeRegion":"84","codesPostaux":["01380"],"population":4088},{"label":"Bâgé-le-Châtel","value":"01026","codeDepartement":"01","codeRegion":"84","codesPostaux":["01380"],"population":915},{"label":"Balan","value":"01027","codeDepartement":"01","codeRegion":"84","codesPostaux":["01360"],"population":2856},{"label":"Baneins","value":"01028","codeDepartement":"01","codeRegion":"84","codesPostaux":["01990"],"population":596},{"label":"Beaupont","value":"01029","codeDepartement":"01","codeRegion":"84","codesPostaux":["01270"],"population":685},{"label":"Beauregard","value":"01030","codeDepartement":"01","codeRegion":"84","codesPostaux":["01480"],"population":885},{"label":"Bellignat","value":"01031","codeDepartement":"01","codeRegion":"84","codesPostaux":["01100"],"population":3618},{"label":"Béligneux","value":"01032","codeDepartement":"01","codeRegion":"84","codesPostaux":["01360"],"population":3314},{"label":"Valserhône","value":"01033","codeDepartement":"01","codeRegion":"84","codesPostaux":["01200"],"population":16302},{"label":"Belley","value":"01034","codeDepartement":"01","codeRegion":"84","codesPostaux":["01300"],"population":9133},{"label":"Belleydoux","value":"01035","codeDepartement":"01","codeRegion":"84","codesPostaux":["01130"],"population":317},{"label":"Valromey-sur-Séran","value":"01036","codeDepartement":"01","codeRegion":"84","codesPostaux":["01260"],"population":1299},{"label":"Bénonces","value":"01037","codeDepartement":"01","codeRegion":"84","codesPostaux":["01470"],"population":294},{"label":"Bény","value":"01038","codeDepartement":"01","codeRegion":"84","codesPostaux":["01370"],"population":762},{"label":"Béon","value":"01039","codeDepartement":"01","codeRegion":"84","codesPostaux":["01350"],"population":464},{"label":"Béréziat","value":"01040","codeDepartement":"01","codeRegion":"84","codesPostaux":["01340"],"population":494},{"label":"Bettant","value":"01041","codeDepartement":"01","codeRegion":"84","codesPostaux":["01500"],"population":750}
     ];
+    const [services, setServices] = useState(undefined)
+    const [actualService, setActualService] = useState(undefined)
+    const [actualSecondaryService, setActualSecondaryService] = useState(undefined)
+    
 
     useEffect(() => {
         if(localStorage.getItem('id_user')){
-            getNext()
+            getInitData()
         }
     }, [])
     const resetUI = () => {
@@ -42,6 +46,30 @@ export default function GestionInscriptionsEntrepreneurs({ citiesP, regionsP, de
         setVerifiedColor('secondary')
         setRefusedColor('secondary')
         setCallbackdateUI(false)
+    }
+    const getInitData = () => {
+        fetch('/api/intranet/gestion-inscriptions-entrepreneurs/get-init-data', {
+            method: 'POST',
+            body: JSON.stringify({
+                id_user: localStorage.getItem('id_user')
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success === 'yes'){
+                setServices(res.services.map(function(item, i){
+                    return { label: item.name, value: item.id }
+                }))
+                getNext()
+            }else{
+                alert('Erreur lors du chargement des données !')
+            }
+        })
+        .catch(err => console.log("ERROR: ", err))
     }
     const getNext = () => {
         resetUI()
@@ -63,6 +91,13 @@ export default function GestionInscriptionsEntrepreneurs({ citiesP, regionsP, de
                 setActualDepartment(res.contractor.code_department)
                 setActualRegion(res.contractor.code_region)
                 setHistory(res.history)
+                if(res?.contractor?.id_service){
+                    setActualService(res.contractor.id_service)
+                }
+                if(res?.contractor?.id_secondary_service){
+                    setActualSecondaryService(res.contractor.id_secondary_service)
+                }
+                
             }else{
                 setHistory(undefined)
                 setContractor(undefined)
@@ -376,12 +411,31 @@ export default function GestionInscriptionsEntrepreneurs({ citiesP, regionsP, de
                                 options={(regions)?regions:""}
                             />
                         </div>
-                        
                     </FormGroup>
                     <FormGroup>
                         <Label for="address">Adresse</Label>
                         <Input name="address" type="text" disabled={(!contractor)} value={(contractor)?contractor?.address:""} 
                         onChange={(e) => setContractor({...contractor, [e.target.name]: e.target.value})} onBlur={(e) => saveField(e.target)}/>
+                    </FormGroup>
+                    <FormGroup className="row">
+                        <div className='col-6'>
+                            <Label for="service">Service principal <b style={{color:"#ED5B0F"}}>*</b></Label>
+                            <Select
+                                name="service"
+                                value={(actualService)?services.find(option => option.value == actualService):""}
+                                onChange={selectedOption => {setActualService(selectedOption.value); saveField2('id_service', selectedOption.value)}}
+                                options={(services)?services:""}
+                            />
+                        </div>
+                        <div className='col'>
+                            <Label for="secondary_service">Service secondaire</Label>
+                            <Select
+                                name="secondary_service"
+                                value={(actualSecondaryService)?services.find(option => option.value == actualSecondaryService):""}
+                                onChange={selectedOption => {setActualSecondaryService(selectedOption.value); saveField2('id_secondary_service', selectedOption.value)}}
+                                options={(services)?services:""}
+                            />
+                        </div>
                     </FormGroup>
                 </CardBody>
             </Card>
