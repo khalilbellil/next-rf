@@ -19,8 +19,14 @@ function Footer() {
         <div className="shadow-top footer" style={footerStyle}>
             <div className="container">
                 <Row>
-                    <Col xs="6" className="pt-2 col-xs-auto"><i>© 2021 RenovationFacile.fr</i></Col>
-                    <Col className="pt-2 col-xs-auto" style={{textAlign: "right"}}><Link className="col" href="/demande-de-devis"><a style={{color:"black"}}>Recevoir un devis</a></Link></Col>
+                    <Col xs="6" className="pt-2 col-xs-auto">
+                        <i>© 2021 RenovationFacile.fr</i>
+                    </Col>
+                    <Col xs="6" className="pt-2 col-xs-auto" style={{textAlign:"right"}}>
+                        <Link href="/demande-de-devis"><a style={{color:"black", paddingRight:"8px"}}>Recevoir un devis</a></Link>
+                        <Link href="/politique-de-confidentialite"><a style={{color:"black", paddingRight:"8px"}}>Politique de confidentialité</a></Link>
+                        <Link href="/conditions-generales"><a style={{color:"black"}}>Conditions générales</a></Link>
+                    </Col>
                 </Row>
             </div>
         </div>

@@ -3,7 +3,7 @@ const { format } = require('date-fns');
 const t_intranet = require('../../../../rf_toolbox/intranet')
 
 module.exports = async (req, res) => {
-    let { id_user } = req.body
+    let { id_user, search } = req.body
     let success = 'no'
     let contractor = undefined
     let history = undefined
@@ -13,9 +13,8 @@ module.exports = async (req, res) => {
         c.company_number, c.c_date, c.id_service, c.id_secondary_service, a.address, a.code_city, a.zip, a.code_department, a.code_region, cs.name as status FROM contractor c 
         LEFT JOIN address a ON c.id_address = a.id 
         LEFT JOIN contractor_status cs ON c.id_contractor_status = cs.id
-        WHERE c.id_contractor_status = 1 
-        AND (c.callbacklater IS NULL OR c.callbacklater <= NOW()) ORDER BY c.c_date ASC LIMIT 1`)
-        if(contractor.length > 0){
+        WHERE c.id = '${search}' OR c.email = '${search}' OR c.name LIKE '%${search}%' OR c.phone = '${search}' OR c.phone2 = '${search}' OR c.company_name LIKE '%${search}%'`)
+        if (contractor.length > 0) {
             contractor = contractor[0];
             let locked = await t_intranet.lockContractor(contractor.id, id_user);
             if(locked === 'true'){
