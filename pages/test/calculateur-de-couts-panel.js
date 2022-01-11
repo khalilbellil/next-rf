@@ -1,6 +1,6 @@
 
 import React from 'react'
-import CalculateurDeCoutsPanel from '../../components/calculateurDeCoutsPanel'
+import CalculateurDeCoutsPanel from '../../components/CalculateurDeCoutsPanel'
 
 export default function calculateurDeCoutsPanel() {
     
