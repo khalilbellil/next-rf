@@ -2,7 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import NavBar from './NavBar'
-import { Button, Col, Row } from 'reactstrap'
+import { Alert, Col, Row } from 'reactstrap'
 
 const headerStyle = {
     color: "white",
@@ -24,6 +24,7 @@ function Header() {
                     </Col>
                     <NavBar />
                 </Row>
+                <Row><Alert className='alert-warning'>Le site web <b>RenovationFacile.fr</b> est en cours de construction, le service de mise en relation n'a pas encore débuté. En revanche les demandes d'inscription des entrepreneurs sont ouvertes. Merci pour votre compréhension.</Alert></Row>
             </div>
         </div>
     )
